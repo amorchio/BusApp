@@ -1,0 +1,41 @@
+CREATE TABLE user (
+  username	varchar(10)	NOT NULL PRIMARY KEY,
+  ssn		numeric(9)	NOT NULL,
+  first_name varchar(30) NOT NULL,
+  last_name varchar(30) NOT NULL,
+  address varchar(50) DEFAULT NULL,
+  zip decimal(5,0) DEFAULT NULL,
+  state varchar(2) DEFAULT NULL,
+  password varchar(50) NOT NULL,
+  email varchar(50) NOT NULL,
+  secQ varchar(50) NOT NULL,
+  secQAnswer varchar(50) NOT NULL,
+  isAdmin int(1) NOT NULL
+) 
+
+CREATE TABLE reservation (
+	pnr			char(6)		NOT NULL PRIMARY KEY,
+	username	varchar(10)	NOT NULL,
+	FOREIGN KEY (username) REFERENCES user(username)
+		
+)
+
+CREATE TABLE bus (
+	busID		numeric(5)	NOT NULL PRIMARY KEY,
+	capacity	numeric(50)	NOT NULL,
+	origin		varchar(20),
+	destination	varchar(20),
+	date		DATE,
+	time		TIME
+
+)
+
+
+CREATE TABLE busRiders (
+	busRiderID	numeric(5)	NOT NULL PRIMARY KEY,
+	busID		numeric(5)	NOT NULL,
+	pnr			char(6)		NOT NULL,
+	FOREIGN KEY (busID) REFERENCES bus(busID),
+	FOREIGN KEY (pnr)	REFERENCES reservation(pnr)
+
+)
