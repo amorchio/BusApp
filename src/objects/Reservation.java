@@ -11,6 +11,7 @@ public class Reservation {
 	public Reservation(int busID, String username) {
 		
 		pnr = generatePNR();
+		this.busID = busID;
 		this.username = username;
 	}
 
