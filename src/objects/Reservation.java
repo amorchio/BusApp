@@ -23,9 +23,12 @@ public class Reservation {
 
 		pnr = "";
 
+		// generates 3 random digits
 		for (int i = 0; i < 3; i++) {
 			pnr += (char) ((Math.random() * 9) + 49) + "";
 		}
+		
+		// generates 3 random uppercase letters and appends them to pnr
 		for (int i = 0; i < 3; i++) {
 			pnr += (char) ((Math.random() * 26) + 65) + "";
 		}
