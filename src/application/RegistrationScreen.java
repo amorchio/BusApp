@@ -10,10 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.geometry.*;
 
-public class RegisterScreen extends Application {
+public class RegistrationScreen extends Application {
 	
 	Stage window;
-	Scene scene1, scene2;
+	Scene scene1;
 	
 	public static void main(String[] args) {
 		launch(args);
