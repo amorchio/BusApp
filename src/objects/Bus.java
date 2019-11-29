@@ -8,17 +8,18 @@ public class Bus {
 	private int capacity;
 	private String origin;
 	private String destination;
-	private Date date;
-	private Time time;
+	private Date departTime; // includes date
+	private Date arrivalTime; // includes date
 	private int busID;
+	private int numBooked;
 	
 	public Bus(int capacity, String origin, String destination,
-			Date date, Time time, int busID) {
+			Date date, Date departTime, Date arrivalTime, int busID) {
 		this.capacity = capacity;
 		this.origin = origin;
 		this.destination = destination;
-		this.date = date;
-		this.time = time;
+		this.departTime = departTime;
+		this.arrivalTime = arrivalTime;
 		this.busID = busID;
 		
 	}
@@ -35,16 +36,20 @@ public class Bus {
 		return destination;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getDepartTime() {
+		return departTime;
 	}
 
-	public Time getTime() {
-		return time;
+	public Date getArrivalTime() {
+		return arrivalTime;
 	}
 
 	public int getBusID() {
 		return busID;
+	}
+
+	public int getNumBooked() {
+		return numBooked;
 	}
 
 	public void setCapacity(int capacity) {
@@ -59,23 +64,23 @@ public class Bus {
 		this.destination = destination;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDepartTime(Date departTime) {
+		this.departTime = departTime;
 	}
 
-	public void setTime(Time time) {
-		this.time = time;
+	public void setArrivalTime(Date arrivalTime) {
+		this.arrivalTime = arrivalTime;
 	}
 
 	public void setBusID(int busID) {
 		this.busID = busID;
 	}
 	
-	public void delBus() {
-		
-		// override: delete the bus itself (need clarification)
-		
-	}
+	
+	
+	
+	
+	
 	
 
 }

@@ -1,6 +1,6 @@
 package objects;
 
-public class Customer {
+public class User {
 	
 	private String first_name;
 	private String last_name;
@@ -15,7 +15,7 @@ public class Customer {
 	private String secQ;
 	private String secQAnswer;
 	
-	public Customer(String first_name, String last_name, int ssn,
+	public User(String first_name, String last_name, int ssn,
 			String address, String city, String state, int zip,
 			String username, String password, String email,
 			String secQ, String secQAnswer) {
