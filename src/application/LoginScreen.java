@@ -1,16 +1,15 @@
 package application;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.scene.*;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
-import javafx.geometry.*;
-import javafx.scene.image.*;
-import javafx.scene.layout.BackgroundImage;
 
 public class LoginScreen extends Application {
 	
@@ -39,37 +38,47 @@ public class LoginScreen extends Application {
 		
 		//create username label
 		Label usernameLabel = new Label("Username:"); //creates a username label
-		pane.setConstraints(usernameLabel, 0, 0); //places the username label on the grid
-		
-		//create username input
-		TextField usernameInput = new TextField(); //creates text field
-		usernameInput.setPromptText("username"); //creates hint for user to type username in text field
-		GridPane.setConstraints(usernameInput, 1, 0); //places the text field on the grid
-		
-		//create password label
 		Label passwordLabel = new Label("Password:"); //creates a password label
-		GridPane.setConstraints(passwordLabel, 0, 1); //places the password label on the grid
 		
-		//create password input
+		//create fields for username and password
+		TextField usernameInput = new TextField(); //creates text field
 		PasswordField passwordInput = new PasswordField(); //creates a hidden password text field
+		usernameInput.setPromptText("username"); //creates hint for user to type username in text field
 		passwordInput.setPromptText("password"); //creates a hint for users to enter their password in the field
-		GridPane.setConstraints(passwordInput, 1, 1); //aligns the password box on the grid
 		
 		
-		// create login
+		//create buttons
 		Button loginButton = new Button("Login"); //creates login button
-		GridPane.setConstraints(loginButton, 2, 0); //aligns it on the grid
-		
-		//create forgot password button
 		Button forgotPasswordButton = new Button("Forgot Password"); //creates a forgot password button
-		GridPane.setConstraints(forgotPasswordButton, 0, 10); //aligns the forgot password button on the grid
-		
-		//create register button
 		Button registerButton = new Button("New User?"); //creates a register button
-		GridPane.setConstraints(registerButton, 0, 12); //aligns the register button on the grid
 		
+		//assign location in grid
+		GridPane.setConstraints(usernameLabel, 0, 0); //places the username label on the grid
+		GridPane.setConstraints(usernameInput, 1, 0); //places the text field on the grid
+		GridPane.setConstraints(passwordLabel, 0, 1); //places the password label on the grid
+		GridPane.setConstraints(passwordInput, 1, 1); //aligns the password box on the grid
+		GridPane.setConstraints(loginButton, 2, 0); //aligns it on the grid
+		GridPane.setConstraints(forgotPasswordButton, 0, 10); //aligns the forgot password button on the grid
+		GridPane.setConstraints(registerButton, 0, 12); //aligns the register button on the grid
+
+		//create action for buttons
+		loginButton.setOnAction(e -> {
+			//pass value entered by user for username and password and assign it to a variable
+			boolean login = MySQLqueries.checkLogin(usernameInput.getText(), passwordInput.getText());
+			//if true, this window should close because MySQLqueries.checkLogin will open a new window
+			if (login) {
+				window.close();
+			}
+		});
+		registerButton.setOnAction(e -> {
+			RegistrationScreen register = new RegistrationScreen();
+			register.start(new Stage());
+			window.close();
+		});
+		
+
 		pane.getChildren().addAll(usernameLabel, usernameInput, passwordLabel, passwordInput, 
-				forgotPasswordButton, loginButton, registerButton);
+				loginButton, forgotPasswordButton, registerButton);
 		
 		//create a scene and place it in the stage/window
 		scene1 = new Scene(pane, 1024, 683);
@@ -77,14 +86,13 @@ public class LoginScreen extends Application {
 		window.setScene(scene1);
 		window.show();
 		
-		
 	}
 	
 	private void closeProgram() {
 		boolean confirm = ConfirmBox.display("Close Program?", "Are you sure you want to close?");
 		
 		if (confirm) {
-			System.out.println("File is saved!");
+			System.out.println("File is saved!"); //this is a placeholder while we decide what we need to save prior to closing
 			window.close();
 		} 
 	}
