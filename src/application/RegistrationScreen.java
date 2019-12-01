@@ -13,13 +13,17 @@ import javafx.stage.Stage;
 
 public class RegistrationScreen extends Application {
 	
-	Stage window;
-	Scene scene1;
+	private Stage window;
+	private Scene scene1;
 
 	@Override
 	public void start(Stage primaryStage) {
 		window = primaryStage;
 		
+		window.setOnCloseRequest(e -> {
+			e.consume(); // consume tells java that we will handle the close request from here by running closeProgram()
+			closeProgram();
+		});
 		
 		//create Label variables
 		Label firstName = new Label("First Name:");
@@ -49,20 +53,31 @@ public class RegistrationScreen extends Application {
 		TextField secQInput = new TextField();
 		TextField secQAInput = new TextField();
 		
+		//create helper message for ssn and zip
+		ssnInput.setPromptText("No dashes, e.g. 999999999");
+		zipInput.setPromptText("5 digit code");
+		passwordInput.setPromptText("must be alpha-numeric");
+		
 		//create buttons
 		Button registerButton = new Button("Register");
 		Button returnButton = new Button("Return to Login Page");
 		
 		//create actions for button
 		registerButton.setOnAction(e -> {
-			MySQLqueries.newUser(last_nameInput.getText(), first_nameInput.getText(), ssnInput.getText(),
-					addressInput.getText(), cityInput.getText(), stateInput.getText(), zipInput.getText(),
+			if(MySQLqueries.newUser(last_nameInput.getText(), first_nameInput.getText(), 
+					Integer.parseInt(ssnInput.getText()), addressInput.getText(), 
+					cityInput.getText(), stateInput.getText(), Integer.parseInt(zipInput.getText()),
 					emailInput.getText(), usernameInput.getText(), passwordInput.getText(),
-					secQInput.getText(), secQAInput.getText());
+					secQInput.getText(), secQAInput.getText())) {
+				MainMenu mainMenu = new MainMenu();
+				mainMenu.start(new Stage());
+				window.close();
+			};
+			
 		});
 		
 		returnButton.setOnAction(e -> {
-			if (ConfirmBox.display("Caution", "Are you sure you want to leave this page?")) {
+			if (ConfirmBox.display("Warning", "Are you sure you want to leave this page?")) {
 				LoginScreen back = new LoginScreen();
 				back.start(new Stage());
 				window.close();
@@ -104,12 +119,12 @@ public class RegistrationScreen extends Application {
 		GridPane.setConstraints(registerButton, 0, 13);
 		GridPane.setConstraints(returnButton, 0, 17);
 		
-		
 		//Place nodes in the pane
-		pane.getChildren().addAll(firstName, first_nameInput, lastName, last_nameInput, ssn, ssnInput,
-				address, addressInput, city, cityInput, state, stateInput, zip, zipInput, email, emailInput,
-				username, usernameInput, password, passwordInput, secQ, secQInput, secQAnswer, secQAInput,
-				registerButton, returnButton);
+			pane.getChildren().addAll(firstName, first_nameInput, lastName, last_nameInput, ssn, ssnInput,
+					address, addressInput, city, cityInput, state, stateInput, zip, zipInput, email, emailInput,
+					username, usernameInput, password, passwordInput, secQ, secQInput,
+					secQAnswer, secQAInput,	registerButton, returnButton);
+
 		
 		// create a scene and place it in the stage/window
 		scene1 = new Scene(pane, 1024, 683);
@@ -119,6 +134,47 @@ public class RegistrationScreen extends Application {
 		
 	}
 
-	
+	private boolean isInt(TextField input, String message) {
+		
+		try {
+			
+			//convert user input to int
+			int number = Integer.parseInt(input.getText());
+			
+			//check if int is a positive number less than 9 digits (to account for leading 0's)
+			if (number > 0 && number <= 999999999) {
 
+				return true;
+			}
+			
+			return false;
+			
+		} catch (NumberFormatException ex) {
+			AlertBox.display("Error", "Error: " + input + " is not a number");
+			return false;
+		}
+		
+	}
+	
+	public static boolean handle(String input, String fieldName) {
+		
+		if (fieldName == "emailInput") {
+			return fieldName.matches("\\S*@\\S*\\.[aA-zZ0-9\\-]{2,}");
+		} else {
+		
+		return false;
+		}
+		
+	}
+	
+	private void closeProgram() {
+		boolean confirm = ConfirmBox.display("Close Program?", "Are you sure you want to close?");
+		
+		if (confirm) {
+			window.close();
+		} 
+	}
+
+	
+	
 }

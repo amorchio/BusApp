@@ -83,7 +83,7 @@ public class Main extends Application {
 		Boolean answer = ConfirmBox.display("Exit Program", "Are you sure you want to exit?");
 		
 		if (answer) {
-			System.out.println("File is saved!");
+		
 			window.close();
 		} 
 		

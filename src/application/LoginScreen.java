@@ -13,8 +13,8 @@ import javafx.stage.Stage;
 
 public class LoginScreen extends Application {
 	
-	Stage window;
-	Scene scene1, scene2;
+	private Stage window;
+	private Scene scene1, scene2;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -75,6 +75,11 @@ public class LoginScreen extends Application {
 			register.start(new Stage());
 			window.close();
 		});
+		forgotPasswordButton.setOnAction(e -> {
+			ForgotPassword forgot = new ForgotPassword();
+			forgot.start(new Stage());
+			window.close();
+		});
 		
 
 		pane.getChildren().addAll(usernameLabel, usernameInput, passwordLabel, passwordInput, 
@@ -92,7 +97,7 @@ public class LoginScreen extends Application {
 		boolean confirm = ConfirmBox.display("Close Program?", "Are you sure you want to close?");
 		
 		if (confirm) {
-			System.out.println("File is saved!"); //this is a placeholder while we decide what we need to save prior to closing
+			
 			window.close();
 		} 
 	}
