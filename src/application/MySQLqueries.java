@@ -19,6 +19,7 @@ public class MySQLqueries {
 			return connection;
 
 		} catch (Exception e) {
+			
 			System.out.println(e);
 		}
 		
@@ -29,11 +30,12 @@ public class MySQLqueries {
 	
 	public static boolean checkLogin(String username, String password) {
 		
-		//add connection close and rewrite mysql query to use PreparedStatement
+		//rewrite mysql query to use PreparedStatement
+		
+		Connection connection = initializeDB();
 		
 		try {
 			
-			Connection connection = initializeDB();
 			
 			//create search string to look up username
 			String queryString = "SELECT username, password " +
@@ -56,17 +58,28 @@ public class MySQLqueries {
 					MainMenu login = new MainMenu();
 					login.start(new Stage());
 					
+					//close connection
+					connection.close();
+					
 					return true;
 					
 				} else {
 					//display error if password does not match username
 					AlertBox.display("Login Error", "Username and/or password is incorrect. Please try again");
+					
+					//close connection
+					connection.close();
+					
 					return false;
 				}
 				
 			} else {
 				//display error if username is not found
 				AlertBox.display("Login Error", "Username not found. Please register as a new user.");
+				
+				//close connection
+				connection.close();
+				
 				return false;
 			}
 			
@@ -86,7 +99,6 @@ public class MySQLqueries {
 		try {
 
 			Connection connection = initializeDB();
-			
 			
 			//mysql insert statement
 			String queryString = "INSERT INTO " +
@@ -125,47 +137,92 @@ public class MySQLqueries {
 			
 			//display error alert box
 			AlertBox.display("Exception", ex.toString());
+			ex.printStackTrace();
 		}
 		return false;
 
 	}
-
 	
 	public static String getSecQ(String username) {
 		
-		//add connection close and rewrite mysql query to use PreparedStatement
-		
 		try {
-
+			
 			Connection connection = initializeDB();
-
-			// create search string to look up username
-			String queryString = "SELECT username, secQ " + 
+			
+			//create search string to look up username
+			String queryString = "SELECT username, secQ " +
 								 "FROM busbookingapp.user WHERE username = ?";
-
-			// create the mysql insert preparedstatement
+			
+			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
-
-			// save query result in variable rset
+			
+			
+			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-
+			
+			
+			 
 			// process the if statement if the mysql query returns a result
 			if (rset.next()) {
 				// check if password matches
-				return rset.getString(0);
+				return rset.getString("secQ");
 
 			} else {				
-				
-				return "Username not found. Please try again"; 
+			
+				return "Username not found"; 
 			}
 
 		} catch (Exception ex) {
 			System.out.println(ex);
+			ex.printStackTrace();
 		}
 		
-		return "Username not found. Please try again"; 
-		
+		return "Username not found";
 	}
 	
+
+	public static void getSecQAnswer(String username, String secQAnswer) {
+		
+		try {
+			
+			Connection connection = initializeDB();
+			
+			//create search string to look up username
+			String queryString = "SELECT username, secQAnswer, password " +
+								 "FROM busbookingapp.user WHERE username = ?";
+			
+			//create the mysql insert preparedstatement
+			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+			preparedStatement.setString(1, username);
+			
+			
+			//save query result in variable rset
+			ResultSet rset = preparedStatement.executeQuery();
+			
+			
+			 
+			// process the if statement if the mysql query returns a result
+			if (rset.next()) {
+
+				if (rset.getString("secQAnswer").equals(secQAnswer)) {
+
+					// display password in pop up
+					AlertBox.display("Display Password", "Your password is " + rset.getString("password"));
+					
+				} else {
+
+					// display alert box
+					AlertBox.display("Error", "Wrong answer! The answer is case-sensitive. Please try again.");
+				}
+
+			} 
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+			ex.printStackTrace();
+		}
+		
+	}
+
 }

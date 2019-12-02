@@ -27,8 +27,7 @@ public class LoginScreen extends Application {
 			e.consume(); // consume tells java that we will handle the close request from here by running closeProgram()
 			closeProgram();
 		});
-		
-		
+				
 		//create a pane and set its properties
 		GridPane pane = new GridPane();
 		pane.setPadding(new Insets(11)); // sets an 11px border
@@ -45,6 +44,7 @@ public class LoginScreen extends Application {
 		PasswordField passwordInput = new PasswordField(); //creates a hidden password text field
 		usernameInput.setPromptText("username"); //creates hint for user to type username in text field
 		passwordInput.setPromptText("password"); //creates a hint for users to enter their password in the field
+		
 		
 		
 		//create buttons
