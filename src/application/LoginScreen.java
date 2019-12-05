@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class LoginScreen extends Application {
 	
 	private Stage window;
-	private Scene scene1, scene2;
+	private Scene scene1;
 	
 	public static void main(String[] args) {
 		launch(args);

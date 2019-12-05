@@ -7,15 +7,22 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.*;
 
+	//
+	//
+	//		THIS IS TO PRACTICE THE CONCEPTS FROM THE VIDEOS...NOT PART OF APP
+	//
+	//
 
 public class Main extends Application {
 	Stage window;
 	Scene scene1, scene2, scene3;
+	ComboBox<String> comboBox;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -45,11 +52,26 @@ public class Main extends Application {
 		});
 		
 		
+		String[] cities = {"Atlanta",
+			"Boston",
+			"Memphis",
+			"Orlando",
+			"New York, NY",
+			"Washington, DC"};
+		
+		
+		comboBox = new ComboBox<>();
+		comboBox.setPromptText("Origin City");
+		comboBox.getItems().addAll(cities);
+		comboBox.setOnAction(e -> printComboBox());
+		
+		
+		
 		//layout 1 = children are laid out in vertical column
 		//this is how we want the window arranged
 		VBox layout1 = new VBox(20);
-		layout1.getChildren().addAll(label1, button3, button1, button2, button4);
-		scene1 = new Scene(layout1, 200, 200);
+		layout1.getChildren().addAll(label1, button3, button1, button2, button4, comboBox);
+		scene1 = new Scene(layout1, 300, 600);
 		
 		//created two objects, a label and a button
 		Label label2 = new Label("Go back, i remembered my password");
@@ -86,6 +108,12 @@ public class Main extends Application {
 		
 			window.close();
 		} 
+		
+	}
+	
+	private void printComboBox() {
+		
+		System.out.println(comboBox.getValue());
 		
 	}
 	 

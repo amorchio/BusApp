@@ -6,9 +6,9 @@ import javafx.stage.Stage;
 
 public class MySQLqueries {
 	
-	static Statement stmt;
+	//static Statement stmt;
 	
-	private static Connection initializeDB() {
+	public static Connection initializeDB() {
 
 		try {
 
@@ -18,9 +18,9 @@ public class MySQLqueries {
 
 			return connection;
 
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			
-			System.out.println(e);
+			System.out.println(ex);
 		}
 		
 		return null;
