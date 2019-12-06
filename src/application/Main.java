@@ -3,6 +3,7 @@ package application;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -15,7 +16,7 @@ import javafx.scene.image.*;
 
 public class Main extends Application {
 	Stage window;
-	Scene scene1, scene2, scene3;
+	Scene scene1; 
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -24,28 +25,21 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		window = primaryStage;
 		
-		//created two objects, a label and a button
-		window.setOnCloseRequest(e -> {
-			e.consume();//tells the program to use the answer from the method closeProgram()
-			closeProgram();
-		});
+		Button bookBus = new Button("Book a Bus");
+		Button changeRes = new Button("Change Bus Reservation");
+		Button profilePg = new Button ("Profile Page");
+		Button logOut = new Button("Logout");
+		Label welcome = new Label("What would you like to do?");
 		
-	
+		VBox menuLayout = new VBox(20);
+		menuLayout.getChildren().addAll(welcome, bookBus, changeRes, profilePg, logOut);
+		menuLayout.setAlignment(Pos.CENTER);
+		scene1 = new Scene(menuLayout, 1024, 683);
+		
+		
 		window.setScene(scene1);
-		window.setTitle("Login Screen");
+		window.setTitle("Main Menu");
 		window.show();
-	}
-	
-	private void closeProgram() {
-		boolean confirm = ConfirmBox.display("Close Program?", "Are you sure you want to close?");
-		
-		if (confirm) {
-			System.out.println("File is saved!");
-			window.close();
-		} else {
-			window.setScene(scene1);
-		}
-	}
-	
+	}	
 
 }
