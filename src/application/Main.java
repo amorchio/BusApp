@@ -62,7 +62,7 @@ public class Main extends Application {
 		
 		comboBox = new ComboBox<>();
 		comboBox.setPromptText("Origin City");
-		comboBox.getItems().addAll(cities);
+		comboBox.getItems().addAll(MySQLqueries.getOriginCities());
 		comboBox.setOnAction(e -> printComboBox());
 		
 		

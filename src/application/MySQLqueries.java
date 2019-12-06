@@ -1,6 +1,7 @@
 package application;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import javafx.stage.Stage;
 
@@ -59,7 +60,7 @@ public class MySQLqueries {
 					login.start(new Stage());
 					
 					//close connection
-					connection.close();
+			//		connection.close();
 					
 					return true;
 					
@@ -68,7 +69,7 @@ public class MySQLqueries {
 					AlertBox.display("Login Error", "Username and/or password is incorrect. Please try again");
 					
 					//close connection
-					connection.close();
+			//		connection.close();
 					
 					return false;
 				}
@@ -78,7 +79,7 @@ public class MySQLqueries {
 				AlertBox.display("Login Error", "Username not found. Please register as a new user.");
 				
 				//close connection
-				connection.close();
+			//	connection.close();
 				
 				return false;
 			}
@@ -126,7 +127,7 @@ public class MySQLqueries {
 			preparedStatement.execute();
 			
 			//close the connection to the database
-			connection.close();
+			//connection.close();
 			
 			return true;
 			
@@ -225,4 +226,36 @@ public class MySQLqueries {
 		
 	}
 
+	public static ArrayList<String> getOriginCities() {
+		
+		//create string array to hold answer
+		ArrayList<String> originCities = new ArrayList<>(); 
+		
+		//initialize connection to database
+		Connection connection = initializeDB();
+		
+		try {
+			
+			//create string of search query
+			String queryString = "SELECT DISTINCT origin " +
+					 "FROM busbookingapp.bus ORDER BY origin";
+			
+			//create the mysql insert preparedstatement
+			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+						
+			//save query result in variable rset
+			ResultSet rset = preparedStatement.executeQuery();
+			
+			while (rset.next()) {
+				originCities.add(rset.getString("origin"));
+			}
+			
+			
+		} catch (Exception ex) {
+			System.out.println(ex);
+			ex.printStackTrace();
+		}
+		
+		return originCities;
+	}
 }
