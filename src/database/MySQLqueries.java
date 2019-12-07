@@ -301,16 +301,16 @@ public class MySQLqueries {
 		
 		return false;
 	}
-//with approved login, retrieve user's information from database
+//with approved login, retrieve user's information from database and return the VO object
 	public static ValueObject retrieveInfo(String username) {
-		public ValueObject user2 = new ValueObject();
+		ValueObject user2 = new ValueObject();
 
 		try {
 
 			Connection connection = initializeDB();
 
 			
-			//mysql statement
+			//mysql statement. Just testing with first naem and last name to get it working first
 			String queryString = "SELECT first_name, last_name " +
 					"FROM busbookingapp.user WHERE username = ?";
 			

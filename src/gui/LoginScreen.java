@@ -71,6 +71,8 @@ public class LoginScreen extends Application {
 			//if true, this window should close because MySQLqueries.checkLogin will open a new window
 			if (login) {
 				window.close();
+				//retrieveInfo method is run and should return an ValueObject object. 
+				//A constructor for ValueObject(ValueObject vo is in ValueObject class
 				ValueObject user = new ValueObject(MySQLqueries.retrieveInfo("amorchio1"));
 				System.out.println(user.getFirstName());
 				
