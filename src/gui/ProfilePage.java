@@ -31,8 +31,8 @@ public class ProfilePage extends Application {
 		 
 		
 		 
-		//Contents
-		 Label welcome = new Label("Welcome [insert user first_name]");
+		//Contents + user.getFirstName(working on it))
+		 Label welcome = new Label("Welcome");
 		
 		//Layout
 		HBox menuLayout = new HBox(20);
