@@ -16,12 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.*;
 
-	//
-	//
-	//		THIS IS TO PRACTICE THE CONCEPTS FROM THE VIDEOS...NOT PART OF APP
-	//
-	//
-
 public class Main extends Application {
 	Stage window;
 	Scene scene1;

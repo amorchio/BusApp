@@ -34,17 +34,17 @@ public class ValueObject {
 	public ValueObject(ValueObject vo) {
 		this.firstName = vo.firstName;
 		this.lastName = vo.lastName;
-		this.username = username;
-		this.ssn = ssn;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
-		this.password = password;
-		this.email = email;
-		this.secQ = secQ;
-		this.secQAnswer = secQAnswer;
-		this.admin = admin;
+		this.username = vo.username;
+		this.ssn = vo.ssn;
+		this.address = vo.address;
+		this.city = vo.city;
+		this.state = vo.state;
+		this.zip = vo.zip;
+		this.password = vo.password;
+		this.email = vo.email;
+		this.secQ = vo.secQ;
+		this.secQAnswer = vo.secQAnswer;
+		this.admin = vo.admin;
 	}
 	
 	//constructor to create a user

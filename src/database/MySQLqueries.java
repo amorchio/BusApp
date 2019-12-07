@@ -311,7 +311,7 @@ public class MySQLqueries {
 			//mysql statement. Just testing with first name and last name to get it working first
 			String queryString = "SELECT firstname, lastname, username, ssn, address, "
 					+ " city, state, zip, password, email, secQ, secQAnswer, isAdmin " +
-					"FROM busbookingapp.user WHERE username = ?";
+					"FROM user WHERE username = ?";
 			
 			
 			//create the mysql insert preparedstatement

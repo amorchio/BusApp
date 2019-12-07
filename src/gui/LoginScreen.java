@@ -74,7 +74,7 @@ public class LoginScreen extends Application {
 				//retrieveInfo method is run and should return an ValueObject object. 
 				//A constructor for ValueObject(ValueObject vo is in ValueObject class
 				user = new ValueObject(MySQLqueries.retrieveInfo(usernameInput.getText()));
-				System.out.println(user.getFirstName() + user.getLastName());
+				System.out.println(user.getEmail());
 				
 			}
 		});
