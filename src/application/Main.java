@@ -1,5 +1,7 @@
 package application;
 	
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,15 +10,20 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.*;
 
+	//
+	//
+	//		THIS IS TO PRACTICE THE CONCEPTS FROM THE VIDEOS...NOT PART OF APP
+	//
+	//
 
 public class Main extends Application {
 	Stage window;
-	Scene scene1; 
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -24,7 +31,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		window = primaryStage;
-		
+
 		//The buttons 
 		Button bookBus = new Button("Book a Bus");
 		Button changeRes = new Button("Change Bus Reservation");
@@ -76,6 +83,5 @@ public class Main extends Application {
 		window.setScene(scene1);
 		window.setTitle("Main Menu");
 		window.show();
-	}	
-
+  }
 }

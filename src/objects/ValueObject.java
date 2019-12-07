@@ -1,26 +1,40 @@
 package objects;
 
-public class User {
-	
-	private String first_name;
-	private String last_name;
+import java.util.Date;
+
+public class ValueObject {
+
+	private int capacity;
+	private String origin;
+	private String destination;
+	private Date departTime; // includes date
+	private Date arrivalTime; // includes date
+	private int busID;
+	private int numBooked;
+	private String pnr;
+	private String firstName;
+	private String lastName;
+	private String username;
 	private int ssn;
 	private String address;
 	private String city;
 	private String state;
 	private int zip;
-	private String username;
 	private String password;
 	private String email;
 	private String secQ;
 	private String secQAnswer;
 	
-	public User(String first_name, String last_name, int ssn,
+	public ValueObject() {
+		
+	}
+	
+	public ValueObject(String firstName, String lastName, int ssn,
 			String address, String city, String state, int zip,
 			String username, String password, String email,
 			String secQ, String secQAnswer) {
-		this.first_name = first_name;
-		this.last_name = last_name;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.ssn = ssn;
 		this.address = address;
 		this.city = city;
@@ -32,31 +46,15 @@ public class User {
 		this.secQ = secQ;
 		this.secQAnswer = secQAnswer;
 	}
-
-	public String getFirst_name() {
-		return first_name;
-	}
-
-	public String getLast_name() {
-		return last_name;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getSecQ() {
-		return secQ;
-	}
-
-	public String getSecQAnswer() {
-		return secQAnswer;
-	}
-
 	
-
+	
+	
+	
+	
+	
+	
 }
+
+
+
+
