@@ -23,9 +23,28 @@ public class ValueObject {
 	private String email;
 	private String secQ;
 	private String secQAnswer;
+	private int admin;
 	
 	public ValueObject() {
 		
+	}
+	
+	//Constructor to create a value object from a valueobject. Mainly want to use for retrieving user info
+	//from LoginScreen
+	public ValueObject(ValueObject vo) {
+		this.firstName = vo.firstName;
+		this.lastName = vo.lastName;
+		this.username = username;
+		this.ssn = ssn;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.password = password;
+		this.email = email;
+		this.secQ = secQ;
+		this.secQAnswer = secQAnswer;
+		this.admin = admin;
 	}
 	
 	//constructor to create a user
@@ -213,6 +232,10 @@ public class ValueObject {
 
 	public void setSecQAnswer(String secQAnswer) {
 		this.secQAnswer = secQAnswer;
+	}
+	
+	public void setAdmin(int admin ) {
+		this.admin = admin;
 	}
 	
 	//method to generate a unique reservation number
