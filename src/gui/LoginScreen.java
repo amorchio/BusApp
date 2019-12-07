@@ -71,7 +71,7 @@ public class LoginScreen extends Application {
 			//if true, this window should close because MySQLqueries.checkLogin will open a new window
 			if (login) {
 				window.close();
-				user.setFirstName(MySQLqueries.retrieveInfo("amorchio1"));
+				ValueObject user = new ValueObject(MySQLqueries.retrieveInfo("amorchio1"));
 				System.out.println(user.getFirstName());
 				
 			}

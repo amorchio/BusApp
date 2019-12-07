@@ -302,8 +302,8 @@ public class MySQLqueries {
 		return false;
 	}
 //with approved login, retrieve user's information from database
-	public static String retrieveInfo(String username) {
-		
+	public static ValueObject retrieveInfo(String username) {
+		public ValueObject user2 = new ValueObject();
 
 		try {
 
@@ -311,7 +311,7 @@ public class MySQLqueries {
 
 			
 			//mysql statement
-			String queryString = "SELECT first_name" +
+			String queryString = "SELECT first_name, last_name " +
 					"FROM busbookingapp.user WHERE username = ?";
 			
 			
@@ -324,14 +324,13 @@ public class MySQLqueries {
 			
 		
 			// process the if statement if the mysql query returns a result
-			if (rset.next()) {
+			while (rset.next()) {
 				
-				ValueObject user = new ValueObject();
 				//assign values from database to ValueObject user
-				user.setFirstName(rset.getString("first_name"));
+				user2.setFirstName(rset.getString("first_name"));
+				user2.setLastName(rset.getString("last_name"));
 //				user.setUsername(rset.getString("username"));
 //				user.setSsn(rset.getInt("ssn"));
-//				user.setLastName(rset.getString("last_name"));
 //				user.setAddress(rset.getString("address"));
 //				user.setCity(rset.getString("city"));
 //				user.setState(rset.getString("state"));
@@ -345,7 +344,7 @@ public class MySQLqueries {
 			//close the connection to the database
 			//connection.close();
 			
-			return user.getFirstName();
+			return user2;
 			
 			}
 			
@@ -356,7 +355,8 @@ public class MySQLqueries {
 			AlertBox.display("Exception", ex.toString());
 			ex.printStackTrace();
 		}
-		return "Wrong";
+		
+		return user2;
 
 	}
 	

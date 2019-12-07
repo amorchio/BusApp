@@ -29,6 +29,13 @@ public class ValueObject {
 		
 	}
 	
+	//Constructor to create a value object from a valueobject. Mainly want to use for retrieving user info
+	//from LoginScreen
+	public ValueObject(ValueObject vo) {
+		this.firstName = vo.firstName;
+		this.lastName = vo.lastName;
+	}
+	
 	//constructor to create a user
 	public ValueObject(String firstName, String lastName, String username, int ssn,
 			String address, String city, String state, int zip, String password, 
