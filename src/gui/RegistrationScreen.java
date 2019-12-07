@@ -1,4 +1,4 @@
-package application;
+package gui;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -10,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import database.MySQLqueries;
 
 public class RegistrationScreen extends Application {
 	
