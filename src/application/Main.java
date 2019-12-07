@@ -16,14 +16,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.*;
 
-	//
-	//
-	//		THIS IS TO PRACTICE THE CONCEPTS FROM THE VIDEOS...NOT PART OF APP
-	//
-	//
+//Main Menu Scene
 
 public class Main extends Application {
 	Stage window;
+	Scene scene1; 
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -40,6 +37,7 @@ public class Main extends Application {
 		Label welcome = new Label("What would you like to do?");
 		
 		//The actions
+		//Goes to the bus reservation page/catalog with all the bus options
 		bookBus.setOnAction(e -> {
 			
 			BusReservation busrespg = new BusReservation();
@@ -47,14 +45,14 @@ public class Main extends Application {
 			window.close();
 			
 			});
-
+		//Goes to the User's Reserved Buses
 		changeRes.setOnAction(e -> {
 		
 			UsersReservedBuses busres = new UsersReservedBuses();
 			busres.start(new Stage());
 			window.close();
 		});
-		
+		//Goes to the Profile Page Scene
 		profilePg.setOnAction(e -> {
 			
 			ProfilePage profpg = new ProfilePage();
@@ -62,7 +60,7 @@ public class Main extends Application {
 			window.close();
 			
 		});
-				
+		//Clicking the logout button will bring it to the Login Screen		
 		logOut.setOnAction(e -> {
 			
 			LoginScreen login = new LoginScreen();
