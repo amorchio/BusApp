@@ -1,5 +1,6 @@
 package gui;
 
+import businessLogic.ValueObject;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +17,7 @@ public class LoginScreen extends Application {
 	
 	private Stage window;
 	private Scene scene1;
+	static ValueObject user = new ValueObject();
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -69,6 +71,11 @@ public class LoginScreen extends Application {
 			//if true, this window should close because MySQLqueries.checkLogin will open a new window
 			if (login) {
 				window.close();
+				//retrieveInfo method is run and should return an ValueObject object. 
+				//A constructor for ValueObject(ValueObject vo is in ValueObject class
+				user = new ValueObject(MySQLqueries.retrieveInfo(usernameInput.getText()));
+				System.out.println(user.getFirstName() + user.getLastName());
+				
 			}
 		});
 		registerButton.setOnAction(e -> {

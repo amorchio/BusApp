@@ -9,10 +9,10 @@ import businessLogic.ValueObject;
 
 public class MySQLqueries {
 	
-	ValueObject user = new ValueObject();
-	ValueObject bus = new ValueObject();
-	ValueObject reservation = new ValueObject();
-	
+	//static ValueObject user = new ValueObject();
+	static ValueObject bus = new ValueObject();
+	static ValueObject reservation = new ValueObject();
+	static ValueObject user = new ValueObject();
 	
 	public static Connection initializeDB() {
 
@@ -65,10 +65,7 @@ public class MySQLqueries {
 					login.start(new Stage());
 					
 					//close connection
-			//		connection.close();
-					
-					//create a user object
-					
+					//connection.close();
 					
 					return true;
 					
@@ -304,7 +301,68 @@ public class MySQLqueries {
 		
 		return false;
 	}
+//with approved login, retrieve user's information from database and return the VO object
+	public static ValueObject retrieveInfo(String username) {
+		try {
+
+			Connection connection = initializeDB();
+
+			
+			//mysql statement. Just testing with first name and last name to get it working first
+			String queryString = "SELECT firstname, lastname, username, ssn, address, "
+					+ " city, state, zip, password, email, secQ, secQAnswer, isAdmin " +
+					"FROM busbookingapp.user WHERE username = ?";
+			
+			
+			//create the mysql insert preparedstatement
+			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+			preparedStatement.setString(1, username);
+			
+			//execute preparedStatement
+			ResultSet rset = preparedStatement.executeQuery();
+			
+		
+			// process the if statement if the mysql query returns a result
+			while (rset.next()) {
+				
+				//assign values from database to ValueObject user
+				user.setFirstName(rset.getString("firstname"));
+				user.setLastName(rset.getString("lastname"));
+				user.setUsername(rset.getString("username"));
+				user.setSsn(rset.getInt("ssn"));
+				user.setAddress(rset.getString("address"));
+				user.setCity(rset.getString("city"));
+				user.setState(rset.getString("state"));
+				user.setZip(rset.getInt("zip"));
+				user.setPassword(rset.getString("password"));
+				user.setEmail(rset.getString("email"));
+				user.setSecQ(rset.getString("secQ"));
+				user.setSecQAnswer(rset.getString("secQAnswer"));
+				user.setAdmin(rset.getInt("isAdmin"));
+				
+			//close the connection to the database
+			//connection.close();
+			
+			return user;
+			
+			}
+			
+
+		} catch (Exception ex) {
+			
+			//display error alert box
+			AlertBox.display("Exception", ex.toString());
+			ex.printStackTrace();
+		}
+		
+		return user;
+
+	}
 	
+	//method to retrieve userObject 
+	public static ValueObject getUser(){
+		return user;
+	}
 	
 	
 }
