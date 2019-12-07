@@ -19,7 +19,7 @@ import javafx.scene.image.*;
 public class ProfilePage extends Application {
 	Stage window;
 	Scene scene1; 
-	
+	static ValueObject user = new ValueObject(MySQLqueries.getUser());
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -29,10 +29,10 @@ public class ProfilePage extends Application {
 	public void start(Stage primaryStage) {
 		 window = primaryStage;
 		 
-		
+		 String name = user.getFirstName();
 		 
 		//Contents + user.getFirstName(working on it))
-		 Label welcome = new Label("Welcome");
+		 Label welcome = new Label("Welcome " + name);
 		
 		//Layout
 		HBox menuLayout = new HBox(20);

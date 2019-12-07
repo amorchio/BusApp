@@ -359,5 +359,10 @@ public class MySQLqueries {
 
 	}
 	
+	//method to retrieve userObject 
+	public static ValueObject getUser(){
+		return user;
+	}
+	
 	
 }
