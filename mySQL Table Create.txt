@@ -75,3 +75,4 @@ VALUES (1235, 35, 'Washington, DC', 'New York, NY', '2019-12-20', '14:30:00');
 INSERT INTO bus (busID, capacity, origin, destination, date, time)
 VALUES (9875, 35, 'New York, NY', 'Atlanta, GA', '2019-12-17', '12:30:00');
 
+

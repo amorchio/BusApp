@@ -117,5 +117,4 @@ public class ForgotPassword extends Application {
 	}
 
 	
-	
 }

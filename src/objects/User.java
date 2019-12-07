@@ -56,8 +56,7 @@ public class User {
 	public String getSecQAnswer() {
 		return secQAnswer;
 	}
-	
-	
+
 	
 
 }
