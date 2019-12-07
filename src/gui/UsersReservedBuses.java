@@ -1,4 +1,4 @@
-package application;
+package gui;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -13,9 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.*;
 
-public class BusReservation extends Application{
+public class UsersReservedBuses extends Application {
 	Stage window;
-	Scene scene1; 
+	Scene scene1;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -23,13 +23,13 @@ public class BusReservation extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) {
-		window = primaryStage;
-		
+		 window = primaryStage;
+		 
 		//Set the scene
 		window.setScene(scene1);
 		window.setTitle("Bus Reservation Page");
 		window.show();
-		
+			
 	}
 
 }

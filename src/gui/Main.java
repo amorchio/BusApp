@@ -1,4 +1,4 @@
-package application;
+package gui;
 	
 import java.util.ArrayList;
 
@@ -45,7 +45,8 @@ public class Main extends Application {
 			
 			BusReservation busrespg = new BusReservation();
 			busrespg.start(new Stage());
-			window.close();
+
+			window.hide();
 			
 			});
 
@@ -53,14 +54,14 @@ public class Main extends Application {
 		
 			UsersReservedBuses busres = new UsersReservedBuses();
 			busres.start(new Stage());
-			window.close();
+			window.hide();
 		});
 		
 		profilePg.setOnAction(e -> {
 			
 			ProfilePage profpg = new ProfilePage();
 			profpg.start(new Stage());
-			window.close();
+			window.hide();
 			
 		});
 				
@@ -68,7 +69,7 @@ public class Main extends Application {
 			
 			LoginScreen login = new LoginScreen();
 			login.start(new Stage());
-			window.close();
+			window.hide();
 			
 		});
 		

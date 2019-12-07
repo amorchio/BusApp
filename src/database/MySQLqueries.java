@@ -1,13 +1,18 @@
-package application;
+package database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import gui.*;
 
 import javafx.stage.Stage;
+import businessLogic.ValueObject;
 
 public class MySQLqueries {
 	
-	//static Statement stmt;
+	ValueObject user = new ValueObject();
+	ValueObject bus = new ValueObject();
+	ValueObject reservation = new ValueObject();
+	
 	
 	public static Connection initializeDB() {
 
@@ -56,11 +61,14 @@ public class MySQLqueries {
 				if (rset.getString("password").equals(password)) {
 					
 					//create new instance of MainMenu
-					MainMenu login = new MainMenu();
+					Main login = new Main();
 					login.start(new Stage());
 					
 					//close connection
 			//		connection.close();
+					
+					//create a user object
+					
 					
 					return true;
 					
@@ -181,7 +189,6 @@ public class MySQLqueries {
 		
 		return "Username not found";
 	}
-	
 
 	public static void getSecQAnswer(String username, String secQAnswer) {
 		
@@ -293,7 +300,10 @@ public class MySQLqueries {
 		return originCities;
 	}
 	
-	
+	public static boolean isAdmin() {
+		
+		return false;
+	}
 	
 	
 	
