@@ -19,6 +19,7 @@ import javafx.scene.image.*;
 public class ProfilePage extends Application {
 	Stage window;
 	Scene scene1; 
+	//getUser will retrieve the pulled userdata of whoever is logged in.
 	static ValueObject user = new ValueObject(MySQLqueries.getUser());
 	
 	public static void main(String[] args) {
@@ -31,7 +32,7 @@ public class ProfilePage extends Application {
 		 
 		 String name = user.getFirstName();
 		 
-		//Contents + user.getFirstName(working on it))
+		//Welcomes you using the name of whoever is logged in
 		 Label welcome = new Label("Welcome " + name);
 		
 		//Layout
