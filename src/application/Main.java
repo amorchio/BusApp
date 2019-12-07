@@ -101,6 +101,7 @@ public class Main extends Application {
 		scene3 = new Scene(layout3, 600, 300);
 		
 		
+		
 		window.setScene(scene1);
 		window.setTitle("Login Screen");
 		window.show();
