@@ -24,6 +24,7 @@ public class ValueObject {
 	private String secQ;
 	private String secQAnswer;
 	
+	//no arg constructor
 	public ValueObject() {
 		
 	}
