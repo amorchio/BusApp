@@ -15,6 +15,7 @@ import javafx.scene.image.*;
 
 public class ProfilePage extends Application {
 	Stage window;
+	Scene scene1; 
 
 	public static void main(String[] args) {
 		launch(args);
@@ -23,6 +24,8 @@ public class ProfilePage extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		 window = primaryStage;
+		 
+		 Label welcome =  = new Label("Welcome ");
 	}
 
 }
