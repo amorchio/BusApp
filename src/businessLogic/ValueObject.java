@@ -23,6 +23,7 @@ public class ValueObject {
 	private String email;
 	private String secQ;
 	private String secQAnswer;
+	private int admin;
 	
 	public ValueObject() {
 		
@@ -213,6 +214,10 @@ public class ValueObject {
 
 	public void setSecQAnswer(String secQAnswer) {
 		this.secQAnswer = secQAnswer;
+	}
+	
+	public void setAdmin(int admin ) {
+		this.admin = admin;
 	}
 	
 	//method to generate a unique reservation number
