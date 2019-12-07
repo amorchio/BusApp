@@ -15,9 +15,9 @@ import javafx.scene.image.*;
 
 public class BusReservation extends Application{
 	Stage window;
-	Scene scene1; 
+	Scene scene1;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		launch(args);
 	}
 	
