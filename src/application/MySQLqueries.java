@@ -258,4 +258,41 @@ public class MySQLqueries {
 		
 		return originCities;
 	}
+	
+	public static ArrayList<String> getDestinationCities(String origin) {
+		
+		//create string array to hold answer
+		ArrayList<String> originCities = new ArrayList<>(); 
+		
+		//initialize connection to database
+		Connection connection = initializeDB();
+		
+		try {
+			
+			//create string of search query so that only cities with the selected origin are displayed
+			String queryString = "SELECT DISTINCT destination " +
+					 "FROM busbookingapp.bus WHERE origin = ? ORDER BY destination";
+			
+			//create the mysql insert preparedstatement
+			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+			preparedStatement.setString(1, origin);
+						
+			//save query result in variable rset
+			ResultSet rset = preparedStatement.executeQuery();
+			
+			while (rset.next()) {
+				originCities.add(rset.getString("destination"));
+			}
+			
+			
+		} catch (Exception ex) {
+			System.out.println(ex);
+			ex.printStackTrace();
+		}
+		
+		return originCities;
+	}
+	
+	
+	
 }

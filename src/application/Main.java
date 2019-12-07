@@ -1,5 +1,7 @@
 package application;
 	
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,7 +24,8 @@ import javafx.scene.image.*;
 public class Main extends Application {
 	Stage window;
 	Scene scene1, scene2, scene3;
-	ComboBox<String> comboBox;
+	ComboBox<String> comboBox1, comboBox2;
+	String origin = "";
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -52,25 +55,28 @@ public class Main extends Application {
 		});
 		
 		
-		String[] cities = {"Atlanta",
-			"Boston",
-			"Memphis",
-			"Orlando",
-			"New York, NY",
-			"Washington, DC"};
+		comboBox1 = new ComboBox<>();
+		comboBox1.setPromptText("Origin City");
+		comboBox1.getItems().addAll(MySQLqueries.getOriginCities()); //database connection
+		comboBox1.setOnAction(e -> {printComboBox(); 
+									origin = comboBox1.getValue(); 
+									comboBox2.getItems().clear();
+									comboBox2.setPromptText("Destination City");
+									comboBox2.getItems().addAll(MySQLqueries.getDestinationCities(comboBox1.getValue()));
+									}
+							 );
 		
+		comboBox2 = new ComboBox<>();
+		comboBox2.setPromptText("Destination City");
+
 		
-		comboBox = new ComboBox<>();
-		comboBox.setPromptText("Origin City");
-		comboBox.getItems().addAll(MySQLqueries.getOriginCities());
-		comboBox.setOnAction(e -> printComboBox());
 		
 		
 		
 		//layout 1 = children are laid out in vertical column
 		//this is how we want the window arranged
 		VBox layout1 = new VBox(20);
-		layout1.getChildren().addAll(label1, button3, button1, button2, button4, comboBox);
+		layout1.getChildren().addAll(label1, button3, button1, button2, button4, comboBox1, comboBox2);
 		scene1 = new Scene(layout1, 300, 600);
 		
 		//created two objects, a label and a button
@@ -113,9 +119,10 @@ public class Main extends Application {
 	
 	private void printComboBox() {
 		
-		System.out.println(comboBox.getValue());
+		System.out.println(comboBox1.getValue());
 		
 	}
+	
 	 
 
 }
