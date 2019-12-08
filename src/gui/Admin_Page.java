@@ -49,16 +49,9 @@ public class Admin_Page extends Application{
 
         //BusUpdateAction
 
-        updateBusRide.setOnAction(e->{
-
-            updateBusRide update = new updateBusRide();
-            update.start(welcome);
-        };
 
 
 
 
     }
-
-}
-
+        }
