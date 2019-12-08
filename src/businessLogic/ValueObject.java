@@ -253,7 +253,7 @@ public class ValueObject {
 	}
 	
 	//method to generate a unique reservation number
-	private String generatePNR() {
+	public String generatePNR() {
 
 		pnr = "";
 
@@ -269,6 +269,10 @@ public class ValueObject {
 
 		return pnr;
 
+	}
+	//setPNR to set to the bus ValueObject after pulling the values from the database
+	public void setPNR(String pnr) {
+		this.pnr = pnr;
 	}
 	
 	

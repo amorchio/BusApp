@@ -307,9 +307,7 @@ public class MySQLqueries {
 
 			
 			//mysql statement. Just testing with first name and last name to get it working first
-			String queryString = "SELECT firstname, lastname, username, ssn, address, "
-					+ " city, state, zip, password, email, secQ, secQAnswer, isAdmin " +
-					"FROM busbookingapp.user WHERE username = ?";
+			String queryString = "SELECT * FROM busbookingapp.user WHERE username = ?";
 			
 			
 			//create the mysql insert preparedstatement
@@ -328,10 +326,10 @@ public class MySQLqueries {
 				user.setCity(rset.getString("city"));
 				user.setState(rset.getString("state"));
 				user.setZip(rset.getInt("zip"));
-				user.setPassword(rset.getString("password"));
+		//		user.setPassword(rset.getString("password"));  		//Not needed after a user is authenticated by the checkLogin method
 				user.setEmail(rset.getString("email"));
-				user.setSecQ(rset.getString("secQ"));
-				user.setSecQAnswer(rset.getString("secQAnswer"));
+		//		user.setSecQ(rset.getString("secQ"));				//Not needed after a user is authenticated by the checkLogin method
+		//		user.setSecQAnswer(rset.getString("secQAnswer"));	//Not needed after a user is authenticated by the checkLogin method
 				user.setAdmin(rset.getInt("isAdmin"));
 				
 			//close the connection to the database
@@ -404,3 +402,27 @@ public class MySQLqueries {
 	}
 	
 }
+
+	
+	
+	//Edit database method
+	/* static void editDatabase(ValueObject vo) {
+		if (vo = bus) {
+			vo.updateValueObject
+		}
+		
+		if (vo = "reservation") {
+			
+		}
+		
+		if (vo = "user") {
+			
+		}
+		
+	}
+	
+	
+	Update ValueObject method
+	
+	*/
+
