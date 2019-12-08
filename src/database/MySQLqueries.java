@@ -364,5 +364,24 @@ public class MySQLqueries {
 		return user;
 	}
 	
+	//Edit database method
+	static void editDatabase(ValueObject vo) {
+		if (vo = bus) {
+			vo.updateValueObject
+		}
+		
+		if (vo = "reservation") {
+			
+		}
+		
+		if (vo = "user") {
+			
+		}
+		
+	}
+	
+	
+	//Update ValueObject method
+	
 	
 }

@@ -27,7 +27,7 @@ public class UsersReservedBuses extends Application {
 		 
 		//Set the scene
 		window.setScene(scene1);
-		window.setTitle("Bus Reservation Page");
+		window.setTitle("Your Bus Reservations");
 		window.show();
 			
 	}
