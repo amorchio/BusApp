@@ -42,10 +42,10 @@ public class ValueObject {
 		this.city = vo.city;
 		this.state = vo.state;
 		this.zip = vo.zip;
-		this.password = vo.password;
+		//this.password = vo.password;
 		this.email = vo.email;
-		this.secQ = vo.secQ;
-		this.secQAnswer = vo.secQAnswer;
+		//this.secQ = vo.secQ;
+		//this.secQAnswer = vo.secQAnswer;
 		this.admin = vo.admin;
 	}
 	

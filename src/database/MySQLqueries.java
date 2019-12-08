@@ -316,7 +316,7 @@ public class MySQLqueries {
 			
 			//execute preparedStatement
 			ResultSet rset = preparedStatement.executeQuery();
-	
+			if (rset.next()) {
 				//assign values from database to ValueObject user
 				user.setFirstName(rset.getString("firstname"));
 				user.setLastName(rset.getString("lastname"));
@@ -336,16 +336,14 @@ public class MySQLqueries {
 			//connection.close();
 			
 			return user;			
-
+			}
 		} catch (Exception ex) {
 			
 			//display error alert box
 			AlertBox.display("Exception", ex.toString());
 			ex.printStackTrace();
 		}
-		
 		return user;
-
 	}
 	
 	//method to retrieve userObject 
@@ -401,6 +399,7 @@ public class MySQLqueries {
 		return busResults;
 	}
 	
+	
 	//Reserving a bus method that will update the database. Initial check on whether or not user has already booked the same bus should happen in the businessLogic
 	public static void reserveBus(String username, int busID) {
 		//Generate PNR
@@ -408,16 +407,19 @@ public class MySQLqueries {
 		
 		try {
 			Connection connection = initializeDB();
-			
+			System.out.println(userPNR);
+			System.out.println("This is the busID " + busID);
 		
 			//mysql statement. Just testing with first name and last name to get it working first
-			String queryString = "INSERT INTO reservation (pnr, username) " +
-									"VALUES (?, ?)";
+			String queryString = "INSERT INTO reservation (pnr, username, busID) " +
+									"VALUES (?, ?, ?)";
 			
 			//create the mysql insert preparedStatement for the reservation table
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, userPNR);
 			preparedStatement.setString(2, username);
+			preparedStatement.setInt(3, busID);
+			
 			
 			//execute preparedStatement
 			preparedStatement.executeUpdate();
@@ -451,6 +453,8 @@ public class MySQLqueries {
 		}
 
 	}
+	
+//bracket that encompasses whole class	
 }
 
 	

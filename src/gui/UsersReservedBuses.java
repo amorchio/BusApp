@@ -27,7 +27,6 @@ public class UsersReservedBuses extends Application {
 	
 	public static void main(String[] args) {
 		//Generate the PNR
-		String PNR = user.generatePNR();
 		launch(args);
 
 	}
@@ -39,6 +38,7 @@ public class UsersReservedBuses extends Application {
 		//Create reservation button and action so that the reservation information is saved into the database
 		Button button = new Button("Click to make Reservation");
 		button.setOnAction(e -> {
+			//hardcoded for testing
 			int busNum = 1234;
 			String userName = user.getUsername();
 			//calls reserveBus method which will INSERT TO the busRider and reservation data tables
