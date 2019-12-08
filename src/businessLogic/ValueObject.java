@@ -7,8 +7,9 @@ public class ValueObject {
 	private int capacity;
 	private String origin;
 	private String destination;
-	private Date departTime;
-	private Date arrivalTime;
+	private String busDate;
+	private String departTime;
+	private String arrivalTime;
 	private int busID;
 	private String pnr;
 	private String firstName;
@@ -35,17 +36,17 @@ public class ValueObject {
 	public ValueObject(ValueObject vo) {
 		this.firstName = vo.firstName;
 		this.lastName = vo.lastName;
-		this.username = username;
-		this.ssn = ssn;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
-		this.password = password;
-		this.email = email;
-		this.secQ = secQ;
-		this.secQAnswer = secQAnswer;
-		this.admin = admin;
+		this.username = vo.username;
+		this.ssn = vo.ssn;
+		this.address = vo.address;
+		this.city = vo.city;
+		this.state = vo.state;
+		this.zip = vo.zip;
+		this.password = vo.password;
+		this.email = vo.email;
+		this.secQ = vo.secQ;
+		this.secQAnswer = vo.secQAnswer;
+		this.admin = vo.admin;
 	}
 	
 	//constructor to create a user
@@ -71,14 +72,14 @@ public class ValueObject {
 	//constructor to create a reservation
 	public ValueObject(int busID, String username) {
 		
-		pnr = generatePNR();
+		this.pnr = generatePNR();
 		this.busID = busID;
 		this.username = username;
 	}
 	
 	//constructor to create a new bus
-	public ValueObject(int busID, String origin, Date departTime, String destination,
-			Date arrivalTime, int capacity) {
+	public ValueObject(int busID, String origin, String departTime, String destination,
+			String arrivalTime, int capacity) {
 		this.busID = busID;
 		this.origin = origin;
 		this.departTime = departTime;
@@ -99,11 +100,11 @@ public class ValueObject {
 		return destination;
 	}
 
-	public Date getDepartTime() {
+	public String getDepartTime() {
 		return departTime;
 	}
 
-	public Date getArrivalTime() {
+	public String getArrivalTime() {
 		return arrivalTime;
 	}
 
@@ -175,12 +176,24 @@ public class ValueObject {
 		this.destination = destination;
 	}
 
-	public void setDepartTime(Date departTime) {
+	public void setDepartTime(String departTime) {
 		this.departTime = departTime;
 	}
 
-	public void setArrivalTime(Date arrivalTime) {
+	public void setArrivalTime(String arrivalTime) {
 		this.arrivalTime = arrivalTime;
+	}
+
+	public String getBusDate() {
+		return busDate;
+	}
+
+	public int getAdmin() {
+		return admin;
+	}
+
+	public void setBusDate(String busDate) {
+		this.busDate = busDate;
 	}
 
 	public void setBusID(int busID) {

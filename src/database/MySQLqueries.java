@@ -3,7 +3,9 @@ package database;
 import java.sql.*;
 import java.util.ArrayList;
 import gui.*;
-
+import businessLogic.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import businessLogic.ValueObject;
 
@@ -297,10 +299,6 @@ public class MySQLqueries {
 		return originCities;
 	}
 	
-	public static boolean isAdmin() {
-		
-		return false;
-	}
 //with approved login, retrieve user's information from database and return the VO object
 	public static ValueObject retrieveInfo(String username) {
 		try {
@@ -320,11 +318,7 @@ public class MySQLqueries {
 			
 			//execute preparedStatement
 			ResultSet rset = preparedStatement.executeQuery();
-			
-		
-			// process the if statement if the mysql query returns a result
-			while (rset.next()) {
-				
+	
 				//assign values from database to ValueObject user
 				user.setFirstName(rset.getString("firstname"));
 				user.setLastName(rset.getString("lastname"));
@@ -343,10 +337,7 @@ public class MySQLqueries {
 			//close the connection to the database
 			//connection.close();
 			
-			return user;
-			
-			}
-			
+			return user;			
 
 		} catch (Exception ex) {
 			
@@ -364,5 +355,52 @@ public class MySQLqueries {
 		return user;
 	}
 	
+	public static ObservableList<ValueObject> getBusSearchResults(String origin, String destination, String date) {
+		
+		//create string array to hold answer
+		ObservableList<ValueObject> busResults = FXCollections.observableArrayList(); 
+		
+		//initialize connection to database
+		Connection connection = initializeDB();
+		
+		try {
+			
+			//create string of search query so that only cities with the selected origin are displayed
+			String queryString = "SELECT * FROM busbookingapp.bus WHERE origin = ? AND destination = ? and date = ? ORDER BY time";
+			
+			//create the mysql insert preparedstatement
+			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+			preparedStatement.setString(1, origin);
+			preparedStatement.setString(2, destination);
+			preparedStatement.setString(3, date);
+						
+			//save query result in variable rset
+			ResultSet rset = preparedStatement.executeQuery();
+			
+			while (rset.next()) {
+				//create a new object to add to the arraylist
+				ValueObject bus = new ValueObject();
+				
+				//set the values for each new object
+				bus.setBusID(rset.getInt("busID"));
+				bus.setCapacity(rset.getInt("capacity"));
+				bus.setOrigin(rset.getString("origin"));
+				bus.setDestination(rset.getString("destination"));
+				bus.setBusDate(rset.getDate("date").toString());
+				bus.setDepartTime(rset.getTime("time").toString());
+				
+				//add object to the arraylist
+				busResults.add(bus);
+				
+			}
+			
+			
+		} catch (Exception ex) {
+			System.out.println(ex);
+			ex.printStackTrace();
+		}
+		
+		return busResults;
+	}
 	
 }
