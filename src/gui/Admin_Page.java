@@ -1,120 +1,64 @@
 package gui;
 
-
-import java.sql.SQLException;
-
-import businessLogic.ValueObject;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-
-public class Admin_page extends Application  {
-    Button buttonBook = new Button("Book a Bus Ride");(
-    Button buttonCancel = new Button("Cancel a Bus Ride");
-    Button buttonSearch = new Button("Search Bus Rides");
-    Button buttonMyRides = new Button("View my Rides");
-    Button buttonAddRides = new Button ("Add/ Edit/ Delete Flight");
-
-    Text textAdmin = new Text("Admin Tools;");
-
-    Button buttonLogout = new Button ("Log Out");
+public class Admin_Page extends Application{
 
     @Override
+    public void start(Stage welcome){
+        welcome.setTitle("Welcome Admin");
 
-    public void start(Stage primaryStage){
+        Label busId = new Label(" Bus Id:");
+        TextField busIdText = new TextField();
+        //buttons
+        Button addABusRide= new Button("Add a Bus Ride");
+        Button removeBusRide = new Button("Remove a Bus Ride");
+        Button updateBusRide = new Button ("Update a Bus Ride");
+        Button searchBusRide = new Button("Search a Bus Ride");
+        Button logout = new Button ("Log Out");
+
+        //grid
         GridPane gridPane = new GridPane();
+        gridPane.setVgap(7);
+        gridPane.setHgap(7);
+        gridPane.setPadding(new Insets(15,15,15,15));
+
+        gridPane.add(addABusRide,0,0);
+        gridPane.add(removeBusRide,0,1);
+        gridPane.add(updateBusRide,0,2);
+        gridPane.add(logout,1,4);
+
+
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setPadding(new Insets(30,30,30,30));
-        gridPane.setHgap(5);
-        gridPane.setVgap(5);
+        gridPane.setStyle("-fx-background-color: LIGHTGREY;");
 
-        //Bus Ride Buttons
+        //SCENE
 
-        gridPane.add(buttonMyRides, 0, 1);
-        gridPane.add(buttonSearch, 0,2);
-        gridPane.add(buttonBook, 0,3);
-        gridPane.add(textAdmin,0,6);
-        gridPane.add(buttonAddRides,0,7);
+        Scene scene = new Scene(gridPane, 500,200);
+        welcome.setTitle("Admin");
+        welcome.setScene(scene);
+        welcome.show();
 
-        gridPane.add(buttonLogout,0,11);
+        //BusUpdateAction
 
-        //Width for buttons
-        buttonMyRides.setMinWidth(200);
-        buttonSearch.setMinWidth(200);
-        buttonBook.setMinWidth(200);
-        buttonCancel.setMinWidth(200);
+        updateBusRide.setOnAction(e->{
 
-
-
-        //button events
-    buttonMyRides.setOnAction(new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent actionEvent) {
-            try{
-                viewMyRides viewRides = new viewMyRides();
-                viewRides.start(primaryStage);
-            }catch(SQLException|ClassNotFoundException exception){
-                System.out.println(exception);
-            }
-
-        }
-    });
-
-    buttonSearch.setOnAction(new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent actionEvent) {
-            try{
-                Search search = new Search();
-                search.start(primaryStage);
-            }catch(SQLException| ClassNotFoundException exception){
-                System.out.println(exception);
-            }
-
-        }
-    });
-
-    //Logout
-
-        buttonLogout.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                ValueObject valueObject = new ValueObject();
-                try{
-
-                }
-            }
-        });
-
-
-
-
-
-
-
-
+            updateBusRide update = new updateBusRide();
+            update.start(welcome);
+        };
 
 
 
 
     }
 
-
-
 }
-
 
