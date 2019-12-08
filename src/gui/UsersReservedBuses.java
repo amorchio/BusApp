@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.*;
 
+//The buses that the user has already reserved
 public class UsersReservedBuses extends Application {
 	Stage window;
 	Scene scene1;
