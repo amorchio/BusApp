@@ -410,35 +410,39 @@ public class MySQLqueries {
 	}
 	//Reserving a bus method that will update the database. Initial check on whether or not user has already booked the same bus should happen in the businessLogic
 	public static void reserveBus(String username, int busID) {
+		//Generate PNR
 		String userPNR = bus.generatePNR();
 		
 		try {
-
 			Connection connection = initializeDB();
-
 			
+		
 			//mysql statement. Just testing with first name and last name to get it working first
-			String queryString = "INSERT INTO busbookingapp.reservation (username, pnr) " +
+			String queryString = "INSERT INTO reservation (pnr, username) " +
 									"VALUES (?, ?)";
-			//Insert data into busRiders table
-			String queryString2 = "INSERT INTO busbookingapp.busRiders (busID, pnr) " +
-									"VALUES (?, ?)";
-	
 			
-			//create the mysql insert preparedstatement for the reservation table
+			//create the mysql insert preparedStatement for the reservation table
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
-			preparedStatement.setString(1, username);
-			preparedStatement.setString(2, userPNR);
-			
-			//create the mysql insert preparedstatement for the busRiders table
-			PreparedStatement preparedStatement2 = connection.prepareStatement(queryString);
-			preparedStatement.setInt(1, busID);
-			preparedStatement.setString(2, userPNR);
+			preparedStatement.setString(1, userPNR);
+			preparedStatement.setString(2, username);
 			
 			//execute preparedStatement
-			preparedStatement.executeQuery();
-			preparedStatement2.executeQuery();
-				
+			preparedStatement.executeUpdate();
+			
+			
+			//Insert data into busRiders table. busID must already exist in the bus table b/c it's a foreign key
+			String queryString2 = "INSERT INTO busRiders (busID, pnr) " +
+									"VALUES (?, ?)";
+			
+			//create the mysql insert preparedStatement for the busRiders table
+			PreparedStatement preparedStatement2 = connection.prepareStatement(queryString2);
+			preparedStatement2.setInt(1, busID);
+			preparedStatement2.setString(2, userPNR);
+			//execute prepared statement
+			preparedStatement2.executeUpdate();
+			
+			
+			System.out.println("Added to the database");
 			//close the connection to the database
 			//connection.close();
 
