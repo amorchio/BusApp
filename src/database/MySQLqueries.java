@@ -64,10 +64,6 @@ public class MySQLqueries {
 				//check if password matches
 				if (rset.getString("password").equals(password)) {
 					
-					//create new instance of MainMenu
-					Main login = new Main();
-					login.start(new Stage());
-					
 					return true;
 					
 				} else {
@@ -328,6 +324,8 @@ public class MySQLqueries {
 		//		user.setSecQ(rset.getString("secQ"));				//Not needed after a user is authenticated by the checkLogin method
 		//		user.setSecQAnswer(rset.getString("secQAnswer"));	//Not needed after a user is authenticated by the checkLogin method
 				user.setAdmin(rset.getInt("isAdmin"));
+				
+
 				
 			//close the connection to the database
 			//connection.close();
