@@ -36,15 +36,15 @@ public class UsersReservedBuses extends Application {
 	public void start(Stage primaryStage) {
 		 window = primaryStage;
 		 
-		//Create reservation button and action so that the reservation information is saved into the database
-		Button button = new Button("Click to make Reservation");
-		Button mainMenu = new Button("Main Menu");
 		
+		Button mainMenu = new Button("Main Menu");
+		//delete reservation button
+		Button button = new Button("Click to delete reservation");
 		button.setOnAction(e -> {
-			int busNum = 1234;
-			String userName = user.getUsername();
-			//calls reserveBus method which will INSERT TO the busRider and reservation data tables
-			MySQLqueries.reserveBus(userName, busNum, 33);
+			//hardcoded for testing PLEASE DELETE
+			String pnr = "522OXA";
+			//calls delete reservation method which will delete reservation
+			MySQLqueries.deleteReservation(pnr);
 		});
 		
 		mainMenu.setOnAction(e -> {
