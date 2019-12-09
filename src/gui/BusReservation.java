@@ -37,6 +37,7 @@ public class BusReservation extends Application{
 		
 		
 		Button searchButton = new Button("Search");
+		Button mainMenuButton = new Button("Main Menu");
 		DatePicker departDate = new DatePicker();
 		departDate.setEditable(false);
 		
@@ -46,6 +47,12 @@ public class BusReservation extends Application{
 		
 		ComboBox<String> destination = new ComboBox<>();
 		destination.setPromptText("Destination City");
+		
+		mainMenuButton.setOnAction(i -> {
+			Main back = new Main();
+			back.start(new Stage());
+			window.close();
+		});
 		
 		origin.setOnAction(e -> {
 			destination.getItems().clear();
@@ -160,9 +167,10 @@ public class BusReservation extends Application{
 		GridPane.setConstraints(destinationLabel, 0, 4);
 		GridPane.setConstraints(destination, 1, 4);
 		GridPane.setConstraints(searchButton, 0, 5);
+		GridPane.setConstraints(mainMenuButton, 0, 7);
 		
 		
-		pane.getChildren().addAll(dateLabel, departDate, originLabel, origin, destinationLabel, destination, searchButton);
+		pane.getChildren().addAll(dateLabel, departDate, originLabel, origin, destinationLabel, destination, searchButton, mainMenuButton);
 		
 		//create a scene and place it in the stage/window
 		scene1 = new Scene(pane, 1024, 683);
