@@ -2,6 +2,7 @@ package businessLogic;
 
 import java.util.Date;
 
+
 public class ValueObject {
 
 	private int capacity;
