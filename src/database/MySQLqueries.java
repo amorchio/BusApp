@@ -2,6 +2,9 @@ package database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import gui.*;
 import businessLogic.*;
 import javafx.collections.FXCollections;
@@ -15,6 +18,7 @@ public class MySQLqueries {
 	static ValueObject bus = new ValueObject();
 	static ValueObject reservation = new ValueObject();
 	static ValueObject user = new ValueObject();
+	static Calendar est = Calendar.getInstance(TimeZone.getTimeZone("EST")); //set a calendar because results from the jdbc were 1 day off
 	
 	public static Connection initializeDB() {
 
@@ -44,7 +48,6 @@ public class MySQLqueries {
 		
 		try {
 			
-			
 			//create search string to look up username
 			String queryString = "SELECT username, password " +
 								 "FROM busbookingapp.user WHERE username = ?";
@@ -52,7 +55,6 @@ public class MySQLqueries {
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
-			
 			
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
@@ -66,17 +68,11 @@ public class MySQLqueries {
 					Main login = new Main();
 					login.start(new Stage());
 					
-					//close connection
-					//connection.close();
-					
 					return true;
 					
 				} else {
 					//display error if password does not match username
 					AlertBox.display("Login Error", "Username and/or password is incorrect. Please try again");
-					
-					//close connection
-			//		connection.close();
 					
 					return false;
 				}
@@ -317,6 +313,7 @@ public class MySQLqueries {
 			//execute preparedStatement
 			ResultSet rset = preparedStatement.executeQuery();
 	
+			while (rset.next()) {
 				//assign values from database to ValueObject user
 				user.setFirstName(rset.getString("firstname"));
 				user.setLastName(rset.getString("lastname"));
@@ -335,6 +332,7 @@ public class MySQLqueries {
 			//close the connection to the database
 			//connection.close();
 			
+			}
 			return user;			
 
 		} catch (Exception ex) {
@@ -376,19 +374,24 @@ public class MySQLqueries {
 			ResultSet rset = preparedStatement.executeQuery();
 			
 			while (rset.next()) {
-				//create a new object to add to the arraylist
-				ValueObject bus = new ValueObject();
 				
-				//set the values for each new object
-				bus.setBusID(rset.getInt("busID"));
-				bus.setCapacity(rset.getInt("capacity"));
-				bus.setOrigin(rset.getString("origin"));
-				bus.setDestination(rset.getString("destination"));
-				bus.setBusDate(rset.getDate("date").toString());
-				bus.setDepartTime(rset.getTime("time").toString());
-				
-				//add object to the arraylist
-				busResults.add(bus);
+				//limit search results to buses with capacity greater than 0
+				if (rset.getInt("capacity") >= 1) {
+					//create a new object to add to the arraylist
+					ValueObject bus = new ValueObject();
+					
+					//set the values for each new object
+					bus.setBusID(rset.getInt("busID"));
+					bus.setCapacity(rset.getInt("capacity"));
+					bus.setOrigin(rset.getString("origin"));
+					bus.setDestination(rset.getString("destination"));
+					bus.setDepartTime(rset.getTime("time").toString());
+					bus.setBusDate((rset.getDate("date", est)).toString());
+					
+					//add object to the arraylist
+					busResults.add(bus);
+					
+				}
 				
 			}
 			
@@ -402,45 +405,76 @@ public class MySQLqueries {
 	}
 	
 	//Reserving a bus method that will update the database. Initial check on whether or not user has already booked the same bus should happen in the businessLogic
-	public static void reserveBus(String username, int busID) {
+	public static void reserveBus(String username, int busID, int capacity) {
 		//Generate PNR
 		String userPNR = bus.generatePNR();
 		
 		try {
+			
 			Connection connection = initializeDB();
 			
-		
-			//mysql statement. Just testing with first name and last name to get it working first
-			String queryString = "INSERT INTO reservation (pnr, username) " +
-									"VALUES (?, ?)";
+			String queryString = "SELECT pnr, username, reservation.busID, " + 
+					"origin, destination, date, time " + 
+					"FROM (reservation INNER JOIN bus " + 
+					"ON reservation.busID = bus.busID) " +
+					"WHERE username = ?";
 			
-			//create the mysql insert preparedStatement for the reservation table
+			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
-			preparedStatement.setString(1, userPNR);
-			preparedStatement.setString(2, username);
+			preparedStatement.setString(1, username);
 			
-			//execute preparedStatement
-			preparedStatement.executeUpdate();
+			//save query result in variable rset
+			ResultSet rset = preparedStatement.executeQuery();
 			
-			
-			//Insert data into busRiders table. busID must already exist in the bus table b/c it's a foreign key
-			String queryString2 = "INSERT INTO busRiders (busID, pnr) " +
-									"VALUES (?, ?)";
-			
-			//create the mysql insert preparedStatement for the busRiders table
-			PreparedStatement preparedStatement2 = connection.prepareStatement(queryString2);
-			preparedStatement2.setInt(1, busID);
-			preparedStatement2.setString(2, userPNR);
-			//execute prepared statement
-			preparedStatement2.executeUpdate();
-			
-			
-			System.out.println("Added to the database");
-			//close the connection to the database
-			//connection.close();
+			while (rset.next()) {
+				if (busID == rset.getInt("busID")) {
+					AlertBox.display("Error: Bus is Already Booked",
+							"This bus is already booked! Reservation " + rset.getString("pnr") +
+							" already contains bus " + rset.getString("busID") + " from " + rset.getString("origin") +
+							" to " + rset.getString("destination") + " on " + rset.getString("date"));
+					
+					
+				} else {
+					//mysql statement. Just testing with first name and last name to get it working first
+					queryString = "INSERT INTO reservation (pnr, username, busID) " +
+											"VALUES (?, ?, ?)";
+					
+					//create the mysql insert preparedStatement for the reservation table
+					preparedStatement = connection.prepareStatement(queryString);
+					preparedStatement.setString(1, userPNR);
+					preparedStatement.setString(2, username);
+					preparedStatement.setInt(3, busID);
+					
+					//execute preparedStatement
+					preparedStatement.executeUpdate();			
+					
+					queryString = "UPDATE bus SET capacity = ? WHERE (busID = ?)";
+					
+					preparedStatement = connection.prepareStatement(queryString);
+					preparedStatement.setInt(1, capacity);
+					preparedStatement.setInt(2, busID);
+					
+					preparedStatement.executeUpdate();
+					
+					preparedStatement = connection.prepareStatement(queryString);
+					queryString = "INSERT INTO busRiders (busID, pnr) VALUES (?,?)";
+					preparedStatement.setInt(1, busID);
+					preparedStatement.setString(2, userPNR);
+					
+					preparedStatement.executeUpdate();
 
-			
+					
+					//create the mysql insert preparedStatement for the busRiders table
+					PreparedStatement preparedStatement2 = connection.prepareStatement(queryString);
+					preparedStatement2.setInt(1, busID);
+					preparedStatement2.setString(2, userPNR);
+					//execute prepared statement
+					preparedStatement2.executeUpdate();
+					
+				}
 			}
+
+		}
 			
 
 		 catch (Exception ex) {

@@ -70,6 +70,7 @@ public class BusReservation extends Application{
 			Label destinationLabel2 = new Label("Destination City: ");
 			Label originSel = new Label(origin.getValue());
 			Label destinationSel = new Label(destination.getValue());
+			Label bufferLabel = new Label();
 			Button backButton = new Button("New Search");
 			Button bookButton = new Button("Book Bus");
 			
@@ -105,15 +106,11 @@ public class BusReservation extends Application{
 			TableColumn<ValueObject, Integer> capacityColumn = new TableColumn<>("Remaining Seats"); //creates new column
 			capacityColumn.setMinWidth(100); //sets column width
 			capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity")); //assigns value to display inside table
-			
-			TableColumn<ValueObject, Button> bookColumn = new TableColumn<>("Select Bus"); //creates new column
-			capacityColumn.setMinWidth(100); //sets column width
-			
 						
 			//create table
 			TableView<ValueObject> resultTable = new TableView<>();
 			resultTable.setItems(searchResult); //designate list to display
-			resultTable.getColumns().addAll(busIDColumn, originColumn, destinationColumn, dateColumn, timeColumn, capacityColumn, bookColumn);
+			resultTable.getColumns().addAll(busIDColumn, originColumn, destinationColumn, dateColumn, timeColumn, capacityColumn);
 			
 			//set action for book button
 			bookButton.setOnAction(i -> {
@@ -131,9 +128,9 @@ public class BusReservation extends Application{
 			//create a scene and place it in the stage/window
 			HBox topMenu = new HBox(20);
 			topMenu.getChildren().addAll(dateLabel2, dateSel, originLabel2, originSel, destinationLabel2,
-					destinationSel, bookButton);
+					destinationSel);
 			VBox mainMenu = new VBox(20);
-			mainMenu.getChildren().addAll(backButton, resultTable);
+			mainMenu.getChildren().addAll(bufferLabel, bookButton, backButton, resultTable);
 			
 			//arrange the menus created using HBox and VBox
 			BorderPane borderPane = new BorderPane();
@@ -179,8 +176,14 @@ public class BusReservation extends Application{
 	
 	public static void bookThisBus(ObservableList<ValueObject> vo, int index) {
 		
-		ValueObject confirmedBus = new ValueObject(vo.get(index).getBusID(), "amorchio1");
-		System.out.println(confirmedBus.getPnr());
+		//retrieve bus value from the observable list and add values to new value object
+		ValueObject selBus = new ValueObject();
+		selBus.setBusID(vo.get(index).getBusID());
+		selBus.setBusDate(vo.get(index).getBusDate());
+		selBus.setCapacity(vo.get(index).getCapacity()); // this is an argument to the sql query so that capacity can be adjusted
+		
+		//send query to database
+		MySQLqueries.reserveBus(LoginScreen.user.getUsername(), selBus.getBusID(), (selBus.getCapacity() - 1));
 		
 		UsersReservedBuses booking = new UsersReservedBuses();
 		booking.start(new Stage());
