@@ -14,10 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.*;
 
@@ -55,9 +53,11 @@ public class UsersReservedBuses extends Application {
 			window.close();
 		});
 
-		ComboBox<String> pnrList = new ComboBox();
+		ComboBox<String> pnrList = new ComboBox<>();
 		pnrList.setPromptText(user.getFirstName() + "'s Reservations");
 		pnrList.getItems().addAll(getBookingPNRs(userBookings));
+		
+		Button displayButton = new Button("Display Reservation");
 		
 		pane.setPadding(new Insets(11)); //set 11px border
 		pane.setAlignment(Pos.TOP_LEFT);
@@ -65,11 +65,12 @@ public class UsersReservedBuses extends Application {
 		pane.setVgap(5);//set vertical gap
 		
 
-		GridPane.setConstraints(reservationLabel, 0, 2);
-		GridPane.setConstraints(pnrList, 1, 2);
-		GridPane.setConstraints(mainMenuButton, 0, 12);
+		GridPane.setConstraints(reservationLabel, 5, 2);
+		GridPane.setConstraints(pnrList, 6, 2);
+		GridPane.setConstraints(mainMenuButton, 5, 12);
+		GridPane.setConstraints(displayButton, 8, 2);
 
-		pane.getChildren().addAll(reservationLabel, pnrList, mainMenuButton);
+		pane.getChildren().addAll(reservationLabel, pnrList, displayButton, mainMenuButton);
 
 		// create a scene and place it in the stage/window
 		scene1 = new Scene(pane, 1024, 683);
@@ -78,7 +79,7 @@ public class UsersReservedBuses extends Application {
 		window.setScene(scene1);
 		window.setTitle("User's Reserved Buses");
 		
-		pnrList.setOnAction(e -> {
+		displayButton.setOnAction(e -> {
 			ValueObject selectedVO = new ValueObject();
 			
 			for (int i = 0; i < userBookings.size(); i++) {
@@ -89,9 +90,7 @@ public class UsersReservedBuses extends Application {
 			
 			// clear previous pane to display secQ and allow user to enter an answer
 			pane.getChildren().clear();
-
-			pnrList.setPromptText(user.getFirstName() + "'s Reservations");
-			pnrList.getItems().addAll(getBookingPNRs(userBookings));
+			pnrList.getSelectionModel().clearSelection();
 			
 			// create labels to display reservation information
 			Label pnrLabel = new Label("PNR:");
@@ -111,11 +110,8 @@ public class UsersReservedBuses extends Application {
 				// calls delete reservation method which will delete reservation
 				MySQLqueries.deleteReservation(pnrList.getValue());
 			});
-
-			GridPane.setConstraints(reservationLabel, 0, 2);
-			GridPane.setConstraints(pnrList, 1, 2);
-			GridPane.setConstraints(mainMenuButton, 0, 12);
-			GridPane.setConstraints(deleteButton, 0, 10);
+			
+			GridPane.setConstraints(deleteButton, 6, 12);
 			GridPane.setConstraints(pnrLabel, 5, 5);
 			GridPane.setConstraints(pnrDisplay, 6, 5);
 			GridPane.setConstraints(busLabel, 5, 6);
@@ -127,11 +123,11 @@ public class UsersReservedBuses extends Application {
 			GridPane.setConstraints(dateLabel, 5, 9);
 			GridPane.setConstraints(dateDisplay, 6, 9);
 
-			pane.getChildren().addAll(reservationLabel, pnrList, pnrLabel, pnrDisplay, busLabel, busDisplay,
+			pane.getChildren().addAll(reservationLabel, pnrList, displayButton, pnrLabel, pnrDisplay, busLabel, busDisplay,
 					originLabel, originDisplay, destinationLabel, destinationDisplay, dateLabel, dateDisplay,
 					deleteButton, mainMenuButton);
 			
-			
+
 
 			// Set the scene
 			window.setScene(scene1);
