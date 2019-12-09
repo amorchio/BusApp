@@ -24,11 +24,13 @@ import database.MySQLqueries;
 import javafx.scene.layout.Pane;
 import javafx.scene.Parent;
 import javafx.fxml.*;
+import javafx.util.Duration;
+import javafx.animation.FadeTransition;
 
 
 public class SplashScreen extends Application{
 	private Stage window;
-		
+	Duration dur = new Duration(2000);
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -42,12 +44,23 @@ public class SplashScreen extends Application{
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-		
+	
+	FadeTransition ft = new FadeTransition(Duration.seconds(3), root);
+	ft.setByValue(1.0);
+	ft.setToValue(0.0);
+	ft.setDelay(dur);
+	ft.play();
+	
 	Scene scene = new Scene(root);
 	primaryStage.setTitle("ok");
     primaryStage.setScene(scene);
     primaryStage.show();
 	
+    ft.setOnFinished(e -> {
+        LoginScreen login = new LoginScreen();
+        login.start(new Stage());
+        primaryStage.close();
+    });
 	}
 	
 }
