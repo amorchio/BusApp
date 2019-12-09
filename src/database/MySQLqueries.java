@@ -303,7 +303,7 @@ public class MySQLqueries {
 
 			
 			//mysql statement. Just testing with first name and last name to get it working first
-			String queryString = "SELECT * FROM busbookingapp.user WHERE username = ?";
+			String queryString = "SELECT * FROM user WHERE username = ?";
 			
 			
 			//create the mysql insert preparedstatement
@@ -408,6 +408,7 @@ public class MySQLqueries {
 	public static void reserveBus(String username, int busID, int capacity) {
 		//Generate PNR
 		String userPNR = bus.generatePNR();
+		int helper = 0;
 		
 		try {
 			
@@ -432,48 +433,58 @@ public class MySQLqueries {
 							"This bus is already booked! Reservation " + rset.getString("pnr") +
 							" already contains bus " + rset.getString("busID") + " from " + rset.getString("origin") +
 							" to " + rset.getString("destination") + " on " + rset.getString("date"));
+					helper = 1;
+					System.out.println("helper inside the while loop is " + helper);
+					break;
 					
-					
-				} else {
-					//mysql statement. Just testing with first name and last name to get it working first
-					queryString = "INSERT INTO reservation (pnr, username, busID) " +
-											"VALUES (?, ?, ?)";
-					
-					//create the mysql insert preparedStatement for the reservation table
-					preparedStatement = connection.prepareStatement(queryString);
-					preparedStatement.setString(1, userPNR);
-					preparedStatement.setString(2, username);
-					preparedStatement.setInt(3, busID);
-					
-					//execute preparedStatement
-					preparedStatement.executeUpdate();			
-					
-					queryString = "UPDATE bus SET capacity = ? WHERE (busID = ?)";
-					
-					preparedStatement = connection.prepareStatement(queryString);
-					preparedStatement.setInt(1, capacity);
-					preparedStatement.setInt(2, busID);
-					
-					preparedStatement.executeUpdate();
-					
-					preparedStatement = connection.prepareStatement(queryString);
-					queryString = "INSERT INTO busRiders (busID, pnr) VALUES (?,?)";
-					preparedStatement.setInt(1, busID);
-					preparedStatement.setString(2, userPNR);
-					
-					preparedStatement.executeUpdate();
-
-					
-					//create the mysql insert preparedStatement for the busRiders table
-					PreparedStatement preparedStatement2 = connection.prepareStatement(queryString);
-					preparedStatement2.setInt(1, busID);
-					preparedStatement2.setString(2, userPNR);
-					//execute prepared statement
-					preparedStatement2.executeUpdate();
-					
-				}
+				} 
 			}
+			System.out.println("Helper before the if statement is" + helper);
+			
+			if (helper != 1) {
+				System.out.println("Helper made it in the if statement");
+				//mysql statement. Just testing with first name and last name to get it working first
+				queryString = "INSERT INTO reservation (pnr, username, busID) " +
+										"VALUES (?, ?, ?)";
+				
+				//create the mysql insert preparedStatement for the reservation table
+				preparedStatement = connection.prepareStatement(queryString);
+				preparedStatement.setString(1, userPNR);
+				preparedStatement.setString(2, username);
+				preparedStatement.setInt(3, busID);
+				
+				//execute preparedStatement
+				preparedStatement.executeUpdate();			
+				
+				queryString = "UPDATE bus SET capacity = ? WHERE (busID = ?)";
+				
+				preparedStatement = connection.prepareStatement(queryString);
+				preparedStatement.setInt(1, capacity);
+				preparedStatement.setInt(2, busID);
+				
+				preparedStatement.executeUpdate();
+				
+				preparedStatement = connection.prepareStatement(queryString);
+				queryString = "INSERT INTO busRiders (busID, pnr) VALUES (?,?)";
+				preparedStatement.setInt(1, busID);
+				preparedStatement.setString(2, userPNR);
+				
+				preparedStatement.executeUpdate();
 
+				
+				//create the mysql insert preparedStatement for the busRiders table
+				PreparedStatement preparedStatement2 = connection.prepareStatement(queryString);
+				preparedStatement2.setInt(1, busID);
+				preparedStatement2.setString(2, userPNR);
+				//execute prepared statement
+				preparedStatement2.executeUpdate();
+				
+				AlertBox.display("Booking Confirmed", "Your reservation number is " + userPNR);
+				
+			}
+			
+			
+			
 		}
 			
 
@@ -542,7 +553,7 @@ public class MySQLqueries {
 				preparedStatement5.setInt(2, busID);
 				preparedStatement5.executeUpdate();
 				
-				
+				AlertBox.display("Booking Canceled", "Confirmation number " + pnr + " has been canceled");
 				System.out.println("reservation information updated");
 			
 				}
@@ -555,7 +566,6 @@ public class MySQLqueries {
 				ex.printStackTrace();
 			}
 		}	
-
 
 	public static ArrayList<ValueObject> getUserPNR(String username) {
 		
@@ -602,27 +612,4 @@ public class MySQLqueries {
 	}
 
 }
-
-	
-	
-	//Edit database method
-	/* static void editDatabase(ValueObject vo) {
-		if (vo = bus) {
-			vo.updateValueObject
-		}
-		
-		if (vo = "reservation") {
-			
-		}
-		
-		if (vo = "user") {
-			
-		}
-		
-	}
-	
-	
-	Update ValueObject method
-	
-	*/
 

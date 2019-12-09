@@ -90,7 +90,6 @@ public class UsersReservedBuses extends Application {
 			
 			// clear previous pane to display secQ and allow user to enter an answer
 			pane.getChildren().clear();
-			pnrList.getSelectionModel().clearSelection();
 			
 			// create labels to display reservation information
 			Label pnrLabel = new Label("PNR:");
@@ -109,7 +108,15 @@ public class UsersReservedBuses extends Application {
 			deleteButton.setOnAction(i -> {
 				// calls delete reservation method which will delete reservation
 				MySQLqueries.deleteReservation(pnrList.getValue());
-			});
+			//	pnrList.getSelectionModel().clearSelection();//clear selection from drop box
+				pnrList.getItems().clear();//clear list from drop box
+				pnrList.getItems().addAll(getBookingPNRs(MySQLqueries.getUserPNR(user.getUsername())));
+				pane.getChildren().clear();
+				pane.getChildren().addAll(reservationLabel, pnrList, displayButton, mainMenuButton);
+				// Set the scene
+				window.setScene(scene1);
+
+				});
 			
 			GridPane.setConstraints(deleteButton, 6, 12);
 			GridPane.setConstraints(pnrLabel, 5, 5);
@@ -142,6 +149,7 @@ public class UsersReservedBuses extends Application {
 	public static ArrayList<String> getBookingPNRs(ArrayList<ValueObject> vo) {
 		
 		ArrayList<String> list = new ArrayList<>();
+
 		
 		for (int i = 0; i < vo.size(); i++) {
 			list.add(vo.get(i).getPnr());
