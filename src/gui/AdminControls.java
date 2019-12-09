@@ -2,6 +2,8 @@ package gui;
 import businessLogic.ValueObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import database.MySQLqueries;
 import javafx.scene.control.Dialog;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -152,8 +154,8 @@ TextArea textArea =new TextArea();
             @Override
             public void handle(ActionEvent e) {
                 ValueObject vc = new ValueObject();
-              if (vo.getDepartTime(departDateBOX.getText()) != true
-                        && vo.getArrivalTime(arrivalDateBOX.getText()) != true) {
+              if (MySQLqueries.departureDate(departDateBOX.getText()) != true
+                        && MySQLqueries.arrivalDate(arrivalDateBOX.getText()) != true) {
                     Label actionTarget = new Label(
                             "INVALID DATE. Enter as YYYY/MM/DD (ex. 2018/12/09, 2018/07/27, etc)");
                     grid.add(actionTarget, 1, 7, 3, 1);
@@ -165,7 +167,7 @@ TextArea textArea =new TextArea();
                         int fNum = Integer.parseInt(busIDBOX.getText());
                         int cCap = Integer.parseInt(fldCurrentCapacity.getText());
                         int mCap = Integer.parseInt(fldMaxCapacity.getText());
-                        vo.addBus(fNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
+                        MySQLqueries.addBus(fNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
                                 arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
                         System.out.println("Flight Successfully Added");
                         AdminControl add = new AdminControl();
