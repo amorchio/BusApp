@@ -485,6 +485,76 @@ public class MySQLqueries {
 		}
 
 	}
+	
+	//deleteing a bus method that will update the database
+		public static void deleteReservation(String pnr) {
+			//CREATE BUS PNR VARIABLE
+			int busID = 1;
+			int busCap = 1;
+			try {
+				Connection connection = initializeDB();
+				
+				//mysql statement. Just testing with first name and last name to get it working first
+				String queryString = "SELECT * FROM busRiders WHERE pnr = ? ";
+				
+				//INSERT STATEMENT TO PULL BUSID VALUE WITH CORRESPONDING PNR
+				PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+				preparedStatement.setString(1, pnr);
+				//executed preparedStatement and save results to rset.
+				ResultSet rset = preparedStatement.executeQuery();
+				//***save the busID info of the reservation into busID
+				if (rset.next()) {
+					busID = rset.getInt("busID");
+					System.out.println("Got the busID");
+				}
+				
+				//DELETE RESERVATION INFO FROM BUSRIDERS USING PNR (must be deleted from first)
+				//String deleteString = "DELETE b, r FROM busRiders b INNER JOIN reservation r ON b.pnr = r.pnr WHERE b.pnr = ?";
+				String deleteString = "DELETE FROM busRiders WHERE pnr = ?";
+				PreparedStatement preparedStatement2 = connection.prepareStatement(deleteString);
+				preparedStatement2.setString(1,  pnr);
+				preparedStatement2.executeUpdate();
+				System.out.println("busRider deletion executed");
+				
+				//DELETE RESERVATION INFO FROM RESERVATION TABLE (must be deleted 2nd)
+				String deleteString2 = "DELETE FROM reservation WHERE pnr = ?";
+				PreparedStatement preparedStatement3 = connection.prepareStatement(deleteString2);
+				preparedStatement3.setString(1,  pnr);
+				preparedStatement3.executeUpdate();
+				System.out.println("reservation deletion executed");
+				
+				//PULL CURRENT BUS CAPACITY FROM BUS TABLE
+				String capacityString = "SELECT * FROM bus WHERE busID = ?";
+				PreparedStatement preparedStatement4 = connection.prepareStatement(capacityString);
+				preparedStatement4.setInt(1, busID);
+				ResultSet rset2 = preparedStatement4.executeQuery();
+				if (rset2.next()) {
+					busCap = rset2.getInt("capacity");
+					//Increase bus capacity by 1 since we are deleting the reservation
+					busCap = busCap + 1;
+				}
+				
+				
+				//UPDATE BUS TABLE WITH NO CAPACITY
+				String capacityString2 = "UPDATE bus SET capacity = ? WHERE busID = ?";
+				PreparedStatement preparedStatement5 = connection.prepareStatement(capacityString2);
+				preparedStatement5.setInt(1, busCap);
+				preparedStatement5.setInt(2, busID);
+				preparedStatement5.executeUpdate();
+				
+				
+				System.out.println("reservation information updated");
+			
+				}
+				
+
+			 catch (Exception ex) {
+				
+				//display error alert box
+				AlertBox.display("Exception", ex.toString());
+				ex.printStackTrace();
+			}
+		}	
 }
 
 	
