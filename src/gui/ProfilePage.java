@@ -24,18 +24,22 @@ public class ProfilePage extends Application {
 	Stage window;
 	Scene scene1; 
 	//getUser will retrieve the pulled userdata of whoever is logged in.
-	static ValueObject user = new ValueObject(MySQLqueries.getUser());
+	
 	
 	public static void main(String[] args) {
+		System.out.println("I run");
 		launch(args);
+		
 	}
 	
 	@Override
 	public void start(Stage primaryStage) {
 		 window = primaryStage;
 		 window.setTitle("Profile Page");
+		 //repopulate user with updated user information from the database
+		 ValueObject user = new ValueObject(MySQLqueries.getUser());
 		
-		//Welcomes you using the name of whoever is logged in
+		 //Welcomes you using the name of whoever is logged in
 		 Text welcome = new Text("Welcome " + user.getFirstName());
 		 welcome.setFont(Font.font(20));
 		 GridPane.setConstraints(welcome, 0, 0);

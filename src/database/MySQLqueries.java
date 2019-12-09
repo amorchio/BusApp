@@ -64,10 +64,6 @@ public class MySQLqueries {
 				//check if password matches
 				if (rset.getString("password").equals(password)) {
 					
-					//create new instance of MainMenu
-					Main login = new Main();
-					login.start(new Stage());
-					
 					return true;
 					
 				} else {
@@ -303,7 +299,7 @@ public class MySQLqueries {
 
 			
 			//mysql statement. Just testing with first name and last name to get it working first
-			String queryString = "SELECT * FROM busbookingapp.user WHERE username = ?";
+			String queryString = "SELECT * FROM user WHERE username = ?";
 			
 			
 			//create the mysql insert preparedstatement
@@ -328,6 +324,8 @@ public class MySQLqueries {
 		//		user.setSecQ(rset.getString("secQ"));				//Not needed after a user is authenticated by the checkLogin method
 		//		user.setSecQAnswer(rset.getString("secQAnswer"));	//Not needed after a user is authenticated by the checkLogin method
 				user.setAdmin(rset.getInt("isAdmin"));
+				
+
 				
 			//close the connection to the database
 			//connection.close();
