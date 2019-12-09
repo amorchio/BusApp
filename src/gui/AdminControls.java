@@ -25,44 +25,44 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.paint.Paint;
 
-public class AdminAddBus extends Application{
-    Label sceneTitle = new Label("Add");
-    Label busID = new Label("Bus ID");
-    Label origin = new Label("origin");
-    Label destination = new Label("destination");
-    Label departureDate = new Label("Departure Date");
-    Label departureTime = new Label("Departure Time");
-    Label arriveDate = new Label("Arrival Date");
-    Label arriveTime = new Label("Arrival Time");
-    Label currentCapacity = new Label("CurrentSeat");
-    Label maxCapacity = new Label("MaxSeat");
-    Label txtAddBus = new Label("Add a Bus:");
+public class AdminControl extends Application{
+    private Label sceneTitle = new Label("Add");
+    private Label busID = new Label("Bus ID");
+    private Label origin = new Label("origin");
+    private Label destination = new Label("destination");
+    private Label departureDate = new Label("Departure Date");
+    private Label departureTime = new Label("Departure Time");
+    private Label arriveDate = new Label("Arrival Date");
+    private Label arriveTime = new Label("Arrival Time");
+    private Label currentCapacity = new Label("CurrentSeat");
+    private Label maxCapacity = new Label("MaxSeat");
+    private  Label txtAddBus = new Label("Add a Bus:");
 
     // Bottom Row
-    Label txtBusID = new Label("Bus ID");
-    Label txtOrigin = new Label("origin");
-    Label txtDestination = new Label("destination");
-    Label txtDepartDate = new Label("Departure Date");
-    Label txtArrivalDate = new Label("Arrival Date");
-    Label txtDepartTime = new Label("Departure Time");
-    Label txtArriveTime = new Label("Arrival Time");
-    Label txtCurrentCapacity = new Label("Current Capacity");
-    Label txtMaxCapacity = new Label("Max Capacity");
+    private  Label txtBusID = new Label("Bus ID");
+    private  Label txtOrigin = new Label("origin");
+    private Label txtDestination = new Label("destination");
+    private Label txtDepartDate = new Label("Departure Date");
+    private Label txtArrivalDate = new Label("Arrival Date");
+    private Label txtDepartTime = new Label("Departure Time");
+    private Label txtArriveTime = new Label("Arrival Time");
+    private Label txtCurrentCapacity = new Label("Current Capacity");
+    private Label txtMaxCapacity = new Label("Max Capacity");
 
-    Button btnAddBus = new Button("Add Bus");
-    Button btnDeleteBus = new Button("Delete Bus");
-    Button btnUpdateBus = new Button("Update Bus");
-    Button btnBack = new Button("Main Menu");
+    private Button btnAddBus = new Button("Add Bus");
+    private Button btnDeleteBus = new Button("Delete Bus");
+    private Button btnUpdateBus = new Button("Update Bus");
+    private Button btnBack = new Button("Main Menu");
 
-    TextField busIDBOX = new TextField();
-    TextField originBOX = new TextField();
-    TextField destinationBOX = new TextField();
-    TextField departDateBOX = new TextField("0000-00-00");
-    TextField arrivalDateBOX = new TextField("0000-00-00");
-    TextField fromTime = new TextField("00:00:00");
-    TextField toTime = new TextField("00:00:00");
-    TextField fldCurrentCapacity = new TextField();
-    TextField fldMaxCapacity = new TextField();
+    private TextField busIDBOX = new TextField();
+    private TextField originBOX = new TextField();
+    private TextField destinationBOX = new TextField();
+    private TextField departDateBOX = new TextField("0000-00-00");
+    private TextField arrivalDateBOX = new TextField("0000-00-00");
+    private TextField fromTime = new TextField("00:00:00");
+    private TextField toTime = new TextField("00:00:00");
+    private TextField fldCurrentCapacity = new TextField();
+    private TextField fldMaxCapacity = new TextField();
 
     @Override
     public void start(Stage primaryStage) throws ClassNotFoundException, SQLException{
@@ -168,7 +168,7 @@ TextArea textArea =new TextArea();
                         vo.addBus(fNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
                                 arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
                         System.out.println("Flight Successfully Added");
-                        AdminAddBus add = new AdminAddBus();
+                        AdminControl add = new AdminControl();
 
                         add.start(primaryStage);
                     } catch (SQLException | ClassNotFoundException n) {
@@ -181,7 +181,7 @@ TextArea textArea =new TextArea();
             @Override
             public void handle(ActionEvent e) {
                 try {
-                    AdminAddBus update = new AdminAddBus();
+                    AdminControl update = new AdminControl();
                     update.start(primaryStage);
                 } catch (SQLException | ClassNotFoundException n) {
                     System.out.println(n);
@@ -193,7 +193,7 @@ TextArea textArea =new TextArea();
             @Override
             public void handle(ActionEvent e) {
                 try {
-                    AdminAddBus delete = new AdminAddBus();
+                    AdminControl delete = new AdminControl();
                     delete.start(primaryStage);
                 } catch (SQLException | ClassNotFoundException n) {
                     System.out.println(n);
