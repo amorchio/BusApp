@@ -487,7 +487,7 @@ public class MySQLqueries {
 	}
 	
 	//deleteing a bus method that will update the database
-		public static void deleteReservation(String pnr) {
+	public static void deleteReservation(String pnr) {
 			//CREATE BUS PNR VARIABLE
 			int busID = 1;
 			int busCap = 1;
@@ -555,6 +555,52 @@ public class MySQLqueries {
 				ex.printStackTrace();
 			}
 		}	
+
+
+	public static ArrayList<ValueObject> getUserPNR(String username) {
+		
+		ArrayList<ValueObject> pnrList = new ArrayList<>();
+
+		try {
+		Connection connection = initializeDB();
+
+		String queryString = "SELECT pnr, username, reservation.busID, capacity, origin, destination, date, time "
+				+ "FROM (reservation INNER JOIN bus " + "ON reservation.busID = bus.busID) " + "WHERE username = ?";
+
+		// create the mysql insert preparedstatement
+		PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+		preparedStatement.setString(1, username);
+
+		// save query result in variable rset
+		ResultSet rset = preparedStatement.executeQuery();
+		
+		while (rset.next()) {
+			ValueObject reservation = new ValueObject();
+			reservation.setPNR(rset.getString("pnr"));
+			reservation.setUsername(rset.getString("username"));
+			reservation.setBusID(rset.getInt("busID"));
+			reservation.setCapacity(rset.getInt("capacity"));
+			reservation.setOrigin(rset.getString("origin"));
+			reservation.setDestination(rset.getString("destination"));
+			reservation.setBusDate(rset.getString("date"));
+			reservation.setDepartTime(rset.getString("time"));
+			
+			pnrList.add(reservation);			
+		}
+		
+		return pnrList;
+
+		// while (rset.next()) {
+		} catch (Exception ex) {
+			
+			ex.printStackTrace();
+			
+		}
+		
+		return pnrList;
+		
+	}
+
 }
 
 	
