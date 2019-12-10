@@ -476,13 +476,13 @@ public class MySQLqueries {
 				
 			}
 			
-		}
+		} catch (Exception ex) {
 			//display error alert box
 			AlertBox.display("Exception", ex.toString());
 			ex.printStackTrace();
 		}
-
 	}
+	
 	//deleteing a bus method that will update the database
 	public static void deleteReservation(String pnr) {
 			//CREATE BUS PNR VARIABLE
@@ -599,4 +599,3 @@ public class MySQLqueries {
 
 }
 
-}

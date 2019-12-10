@@ -76,16 +76,16 @@ public class Admin_Page extends Application{
             try{
                 AdminControl add = new AdminControl();
                 add.start(welcome);
-            }catch(SQLException | ClassNotFoundException l) {
-                System.out.println(l);
-            }
+            }catch(Exception l) {
+                l.printStackTrace();
+            } 
         });
         deleteBusRide.setOnAction(e -> {
             try {
                 AdminControl delete = new AdminControl();
                 delete.start(welcome);
-            } catch (SQLException | ClassNotFoundException n) {
-                System.out.println(n);
+            } catch (Exception n) {
+               n.printStackTrace();
             }
         });
 

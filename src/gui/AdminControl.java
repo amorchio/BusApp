@@ -171,10 +171,9 @@ public class AdminControl extends Application{
         primaryStage.show();
 
         //add bus action
-        btnAddBus.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                ValueObject vc = new ValueObject();
+        btnAddBus.setOnAction(e -> {
+
+             //   ValueObject vc = new ValueObject();
                 if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
                     AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
 
@@ -195,34 +194,30 @@ public class AdminControl extends Application{
                     AlertBox.display("Bus Ride", "Successfully Added");
                     AdminControl add = new AdminControl();
                     add.start(primaryStage);
-                }}
+                }
         });
 
 
 
-        btnUpdateBus.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        btnUpdateBus.setOnAction(e -> {
                 try {
                     AdminControl update = new AdminControl();
                     update.start(primaryStage);
-                } catch (SQLException | ClassNotFoundException n) {
-                    System.out.println(n);
+                } catch (Exception n) {
+                    n.printStackTrace();;
                 }
-            }
+            
         });
 
-        btnDeleteBus.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        btnDeleteBus.setOnAction(e -> {
             try {
                 AdminControl delete = new AdminControl();
                 delete.start(primaryStage);
                 }
-            catch (SQLException | ClassNotFoundException n) {
-                    System.out.println(n);
+            catch (Exception n) {
+                    n.printStackTrace();;
                 }
-            }
+            
         });
 
         btnBack.setOnAction(e -> {
