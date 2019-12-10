@@ -18,8 +18,10 @@ public class MySQLqueries {
 	static ValueObject bus = new ValueObject();
 	static ValueObject reservation = new ValueObject();
 	static ValueObject user = new ValueObject();
-	static Calendar est = Calendar.getInstance(TimeZone.getTimeZone("EST")); //set a calendar because results from the jdbc were 1 day off
-
+  
+	//set a calendar because results from the jdbc were 1 day off
+	static Calendar est = Calendar.getInstance(TimeZone.getTimeZone("EST")); 
+  
 	public static Connection initializeDB() {
 
 		try {
@@ -36,7 +38,6 @@ public class MySQLqueries {
 		}
 
 		return null;
-
 
 	}
 
@@ -69,16 +70,13 @@ public class MySQLqueries {
 				} else {
 					//display error if password does not match username
 					AlertBox.display("Login Error", "Username and/or password is incorrect. Please try again");
-
+          
 					return false;
 				}
 
 			} else {
 				//display error if username is not found
 				AlertBox.display("Login Error", "Username not found. Please register as a new user.");
-
-				//close connection
-				//	connection.close();
 
 				return false;
 			}
@@ -92,9 +90,11 @@ public class MySQLqueries {
 	}
 
 	public static boolean newUser(String lastName, String firstName, int ssn, String address,
-								  String city, String state, int zip, String email, String username, String password,
-								  String secQ, String secQAnswer) {
-
+                                
+			String city, String state, int zip, String email, String username, String password,
+			String secQ, String secQAnswer, String adminCode) {
+		
+		ValueObject user = new ValueObject();
 
 		try {
 
@@ -102,10 +102,11 @@ public class MySQLqueries {
 
 			//mysql insert statement
 			String queryString = "INSERT INTO " +
-					"busbookingapp.user (username, ssn, first_name, last_name, " +
-					"address, city, state, zip, password, email, secQ, secQAnswer) " +
-					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+					"busbookingapp.user (username, ssn, firstname, lastname, " +
+					"address, city, state, zip, password, email, secQ, secQAnswer, isAdmin) " + 
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			
 
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
@@ -121,17 +122,18 @@ public class MySQLqueries {
 			preparedStatement.setString(10, email);
 			preparedStatement.setString(11, secQ);
 			preparedStatement.setString(12, secQAnswer);
-
+      
+			//check if user keyed correct admin code
+			if (adminCode.equals("gatekeeper")) {
+				preparedStatement.setBoolean(13, true);
+			} else {
+				preparedStatement.setBoolean(13, false);
+			}
+			
 			//execute preparedStatement
 			preparedStatement.execute();
-
-			//close the connection to the database
-			//connection.close();
-
+			
 			return true;
-
-
-
 
 		} catch (Exception ex) {
 
@@ -291,7 +293,8 @@ public class MySQLqueries {
 		return originCities;
 	}
 
-	//with approved login, retrieve user's information from database and return the VO object
+//with approved login, retrieve user's information from database and return the VO object
+
 	public static ValueObject retrieveInfo(String username) {
 		try {
 
@@ -300,7 +303,6 @@ public class MySQLqueries {
 
 			//mysql statement. Just testing with first name and last name to get it working first
 			String queryString = "SELECT * FROM user WHERE username = ?";
-
 
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
@@ -319,19 +321,11 @@ public class MySQLqueries {
 				user.setCity(rset.getString("city"));
 				user.setState(rset.getString("state"));
 				user.setZip(rset.getInt("zip"));
-				//		user.setPassword(rset.getString("password"));  		//Not needed after a user is authenticated by the checkLogin method
 				user.setEmail(rset.getString("email"));
-				//		user.setSecQ(rset.getString("secQ"));				//Not needed after a user is authenticated by the checkLogin method
-				//		user.setSecQAnswer(rset.getString("secQAnswer"));	//Not needed after a user is authenticated by the checkLogin method
 				user.setAdmin(rset.getInt("isAdmin"));
-
-
-
-				//close the connection to the database
-				//connection.close();
-
+				
 			}
-			return user;
+			return user;			
 
 		} catch (Exception ex) {
 
@@ -348,31 +342,31 @@ public class MySQLqueries {
 	public static ValueObject getUser(){
 		return user;
 	}
-
+	
 	public static ObservableList<ValueObject> getBusSearchResults(String origin, String destination, String date) {
-
+		
 		//create string array to hold answer
-		ObservableList<ValueObject> busResults = FXCollections.observableArrayList();
-
+		ObservableList<ValueObject> busResults = FXCollections.observableArrayList(); 
+		
 		//initialize connection to database
 		Connection connection = initializeDB();
-
+		
 		try {
-
+			
 			//create string of search query so that only cities with the selected origin are displayed
 			String queryString = "SELECT * FROM busbookingapp.bus WHERE origin = ? AND destination = ? and date = ? ORDER BY time";
-
+			
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, origin);
 			preparedStatement.setString(2, destination);
 			preparedStatement.setString(3, date);
-
+				
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-
+			
 			while (rset.next()) {
-
+				
 				//limit search results to buses with capacity greater than 0
 				if (rset.getInt("capacity") >= 1) {
 					//create a new object to add to the arraylist
@@ -385,228 +379,224 @@ public class MySQLqueries {
 					bus.setDestination(rset.getString("destination"));
 					bus.setDepartTime(rset.getTime("time").toString());
 					bus.setBusDate((rset.getDate("date", est)).toString());
-
+					
 					//add object to the arraylist
 					busResults.add(bus);
-
+					
 				}
-
+				
 			}
-
-
+			
+			
 		} catch (Exception ex) {
 			System.out.println(ex);
 			ex.printStackTrace();
 		}
-
 		return busResults;
 	}
+	
+	//Reserving a bus method that will update the database. Initial check on whether or not 
+	//the user has already booked the same bus should happen in the businessLogic
 
-	//Reserving a bus method that will update the database. Initial check on whether or not user has already booked the same bus should happen in the businessLogic
 	public static void reserveBus(String username, int busID, int capacity) {
 		//Generate PNR
 		String userPNR = bus.generatePNR();
 		int helper = 0;
 
 		try {
-
+			
 			Connection connection = initializeDB();
-
-			String queryString = "SELECT pnr, username, reservation.busID, " +
-					"origin, destination, date, time " +
-					"FROM (reservation INNER JOIN bus " +
+			
+			String queryString = "SELECT pnr, username, reservation.busID, " + 
+					"origin, destination, date, time " + 
+					"FROM (reservation INNER JOIN bus " + 
 					"ON reservation.busID = bus.busID) " +
 					"WHERE username = ?";
-
+			
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
-
+			
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-
+			
 			while (rset.next()) {
 				if (busID == rset.getInt("busID")) {
 					AlertBox.display("Error: Bus is Already Booked",
 							"This bus is already booked! Reservation " + rset.getString("pnr") +
-									" already contains bus " + rset.getString("busID") + " from " + rset.getString("origin") +
-									" to " + rset.getString("destination") + " on " + rset.getString("date"));
+							" already contains bus " + rset.getString("busID") + " from " + rset.getString("origin") +
+							" to " + rset.getString("destination") + " on " + rset.getString("date"));
 					helper = 1;
 					System.out.println("helper inside the while loop is " + helper);
 					break;
-
-				}
+					
+				} 
 			}
 			System.out.println("Helper before the if statement is" + helper);
-
+			
 			if (helper != 1) {
 				System.out.println("Helper made it in the if statement");
 				//mysql statement. Just testing with first name and last name to get it working first
 				queryString = "INSERT INTO reservation (pnr, username, busID) " +
-						"VALUES (?, ?, ?)";
-
+										"VALUES (?, ?, ?)";
+				
 				//create the mysql insert preparedStatement for the reservation table
 				preparedStatement = connection.prepareStatement(queryString);
 				preparedStatement.setString(1, userPNR);
 				preparedStatement.setString(2, username);
 				preparedStatement.setInt(3, busID);
-
+				
 				//execute preparedStatement
-				preparedStatement.executeUpdate();
-
+				preparedStatement.executeUpdate();			
+				
 				queryString = "UPDATE bus SET capacity = ? WHERE (busID = ?)";
-
+				
 				preparedStatement = connection.prepareStatement(queryString);
 				preparedStatement.setInt(1, capacity);
 				preparedStatement.setInt(2, busID);
-
+				
 				preparedStatement.executeUpdate();
-
+				
 				preparedStatement = connection.prepareStatement(queryString);
 				queryString = "INSERT INTO busRiders (busID, pnr) VALUES (?,?)";
 				preparedStatement.setInt(1, busID);
 				preparedStatement.setString(2, userPNR);
-
+				
 				preparedStatement.executeUpdate();
 
-
+				
 				//create the mysql insert preparedStatement for the busRiders table
 				PreparedStatement preparedStatement2 = connection.prepareStatement(queryString);
 				preparedStatement2.setInt(1, busID);
 				preparedStatement2.setString(2, userPNR);
 				//execute prepared statement
 				preparedStatement2.executeUpdate();
-
+				
 				AlertBox.display("Booking Confirmed", "Your reservation number is " + userPNR);
-
+				
 			}
-
-
-
+			
 		}
-
-
-		catch (Exception ex) {
-
 			//display error alert box
 			AlertBox.display("Exception", ex.toString());
 			ex.printStackTrace();
 		}
 
 	}
-
 	//deleteing a bus method that will update the database
 	public static void deleteReservation(String pnr) {
-		//CREATE BUS PNR VARIABLE
-		int busID = 1;
-		int busCap = 1;
-		try {
-			Connection connection = initializeDB();
+			//CREATE BUS PNR VARIABLE
+			int busID = 1;
+			int busCap = 1;
+			try {
+				Connection connection = initializeDB();
+				
+				//mysql statement. Just testing with first name and last name to get it working first
+				String queryString = "SELECT * FROM busRiders WHERE pnr = ? ";
+				
+				//INSERT STATEMENT TO PULL BUSID VALUE WITH CORRESPONDING PNR
+				PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+				preparedStatement.setString(1, pnr);
+				//executed preparedStatement and save results to rset.
+				ResultSet rset = preparedStatement.executeQuery();
+				//***save the busID info of the reservation into busID
+				if (rset.next()) {
+					busID = rset.getInt("busID");
+					System.out.println("Got the busID");
+				}
+				
+				//DELETE RESERVATION INFO FROM BUSRIDERS USING PNR (must be deleted from first)
+				//String deleteString = "DELETE b, r FROM busRiders b INNER JOIN reservation r ON b.pnr = r.pnr WHERE b.pnr = ?";
+				String deleteString = "DELETE FROM busRiders WHERE pnr = ?";
+				PreparedStatement preparedStatement2 = connection.prepareStatement(deleteString);
+				preparedStatement2.setString(1,  pnr);
+				preparedStatement2.executeUpdate();
+				System.out.println("busRider deletion executed");
+				
+				//DELETE RESERVATION INFO FROM RESERVATION TABLE (must be deleted 2nd)
+				String deleteString2 = "DELETE FROM reservation WHERE pnr = ?";
+				PreparedStatement preparedStatement3 = connection.prepareStatement(deleteString2);
+				preparedStatement3.setString(1,  pnr);
+				preparedStatement3.executeUpdate();
+				System.out.println("reservation deletion executed");
+				
+				//PULL CURRENT BUS CAPACITY FROM BUS TABLE
+				String capacityString = "SELECT * FROM bus WHERE busID = ?";
+				PreparedStatement preparedStatement4 = connection.prepareStatement(capacityString);
+				preparedStatement4.setInt(1, busID);
+				ResultSet rset2 = preparedStatement4.executeQuery();
+				if (rset2.next()) {
+					busCap = rset2.getInt("capacity");
+					//Increase bus capacity by 1 since we are deleting the reservation
+					busCap = busCap + 1;
+				}
+				
+				
+				//UPDATE BUS TABLE WITH NO CAPACITY
+				String capacityString2 = "UPDATE bus SET capacity = ? WHERE busID = ?";
+				PreparedStatement preparedStatement5 = connection.prepareStatement(capacityString2);
+				preparedStatement5.setInt(1, busCap);
+				preparedStatement5.setInt(2, busID);
+				preparedStatement5.executeUpdate();
+				
+				AlertBox.display("Booking Canceled", "Confirmation number " + pnr + " has been canceled");
+				System.out.println("reservation information updated");
+			
+				}
+				
 
-			//mysql statement. Just testing with first name and last name to get it working first
-			String queryString = "SELECT * FROM busRiders WHERE pnr = ? ";
-
-			//INSERT STATEMENT TO PULL BUSID VALUE WITH CORRESPONDING PNR
-			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
-			preparedStatement.setString(1, pnr);
-			//executed preparedStatement and save results to rset.
-			ResultSet rset = preparedStatement.executeQuery();
-			//***save the busID info of the reservation into busID
-			if (rset.next()) {
-				busID = rset.getInt("busID");
-				System.out.println("Got the busID");
+			 catch (Exception ex) {
+				
+				//display error alert box
+				AlertBox.display("Exception", ex.toString());
+				ex.printStackTrace();
 			}
-
-			//DELETE RESERVATION INFO FROM BUSRIDERS USING PNR (must be deleted from first)
-			//String deleteString = "DELETE b, r FROM busRiders b INNER JOIN reservation r ON b.pnr = r.pnr WHERE b.pnr = ?";
-			String deleteString = "DELETE FROM busRiders WHERE pnr = ?";
-			PreparedStatement preparedStatement2 = connection.prepareStatement(deleteString);
-			preparedStatement2.setString(1,  pnr);
-			preparedStatement2.executeUpdate();
-			System.out.println("busRider deletion executed");
-
-			//DELETE RESERVATION INFO FROM RESERVATION TABLE (must be deleted 2nd)
-			String deleteString2 = "DELETE FROM reservation WHERE pnr = ?";
-			PreparedStatement preparedStatement3 = connection.prepareStatement(deleteString2);
-			preparedStatement3.setString(1,  pnr);
-			preparedStatement3.executeUpdate();
-			System.out.println("reservation deletion executed");
-
-			//PULL CURRENT BUS CAPACITY FROM BUS TABLE
-			String capacityString = "SELECT * FROM bus WHERE busID = ?";
-			PreparedStatement preparedStatement4 = connection.prepareStatement(capacityString);
-			preparedStatement4.setInt(1, busID);
-			ResultSet rset2 = preparedStatement4.executeQuery();
-			if (rset2.next()) {
-				busCap = rset2.getInt("capacity");
-				//Increase bus capacity by 1 since we are deleting the reservation
-				busCap = busCap + 1;
-			}
-
-
-			//UPDATE BUS TABLE WITH NO CAPACITY
-			String capacityString2 = "UPDATE bus SET capacity = ? WHERE busID = ?";
-			PreparedStatement preparedStatement5 = connection.prepareStatement(capacityString2);
-			preparedStatement5.setInt(1, busCap);
-			preparedStatement5.setInt(2, busID);
-			preparedStatement5.executeUpdate();
-
-			AlertBox.display("Booking Canceled", "Confirmation number " + pnr + " has been canceled");
-			System.out.println("reservation information updated");
-
-		}
-
-
-		catch (Exception ex) {
-
-			//display error alert box
-			AlertBox.display("Exception", ex.toString());
-			ex.printStackTrace();
-		}
-	}
+		}	
 
 	public static ArrayList<ValueObject> getUserPNR(String username) {
-
+		
 		ArrayList<ValueObject> pnrList = new ArrayList<>();
 
 		try {
-			Connection connection = initializeDB();
+		Connection connection = initializeDB();
 
-			String queryString = "SELECT pnr, username, reservation.busID, capacity, origin, destination, date, time "
-					+ "FROM (reservation INNER JOIN bus " + "ON reservation.busID = bus.busID) " + "WHERE username = ?";
+		String queryString = "SELECT pnr, username, reservation.busID, capacity, origin, destination, date, time "
+				+ "FROM (reservation INNER JOIN bus " + "ON reservation.busID = bus.busID) " + "WHERE username = ?";
 
-			// create the mysql insert preparedstatement
-			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
-			preparedStatement.setString(1, username);
+		// create the mysql insert preparedstatement
+		PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+		preparedStatement.setString(1, username);
 
-			// save query result in variable rset
-			ResultSet rset = preparedStatement.executeQuery();
-
-			while (rset.next()) {
-				ValueObject reservation = new ValueObject();
-				reservation.setPNR(rset.getString("pnr"));
-				reservation.setUsername(rset.getString("username"));
-				reservation.setBusID(rset.getInt("busID"));
-				reservation.setCapacity(rset.getInt("capacity"));
-				reservation.setOrigin(rset.getString("origin"));
-				reservation.setDestination(rset.getString("destination"));
-				reservation.setBusDate(rset.getString("date"));
-				reservation.setDepartTime(rset.getString("time"));
-
-				pnrList.add(reservation);
-			}
-
-			return pnrList;
-
-			// while (rset.next()) {
-		} catch (Exception ex) {
-
-			ex.printStackTrace();
-
+		// save query result in variable rset
+		ResultSet rset = preparedStatement.executeQuery();
+		
+		while (rset.next()) {
+			ValueObject reservation = new ValueObject();
+			reservation.setPNR(rset.getString("pnr"));
+			reservation.setUsername(rset.getString("username"));
+			reservation.setBusID(rset.getInt("busID"));
+			reservation.setCapacity(rset.getInt("capacity"));
+			reservation.setOrigin(rset.getString("origin"));
+			reservation.setDestination(rset.getString("destination"));
+			reservation.setBusDate(rset.getString("date"));
+			reservation.setDepartTime(rset.getString("time"));
+			
+			pnrList.add(reservation);			
 		}
-
+		
 		return pnrList;
 
+		// while (rset.next()) {
+		} catch (Exception ex) {
+			
+			ex.printStackTrace();
+			
+		}
+		
+		return pnrList;
+		
 	}
+
+}
 
 }

@@ -24,16 +24,17 @@ public class UsersReservedBuses extends Application {
 	Stage window;
 	Scene scene1;
 
+
 	//create a pane and set its properties
 	GridPane pane = new GridPane();
 
 	//gets userdata
 	static ValueObject user = LoginScreen.user;
 
-
 	public static void main(String[] args) {
 		//Generate the PNR
-		//	String PNR = user.generatePNR();
+
+	//	String PNR = user.generatePNR();
 		launch(args);
 
 	}
@@ -41,6 +42,12 @@ public class UsersReservedBuses extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		window = primaryStage;
+    
+		window.setOnCloseRequest(e -> {
+			e.consume(); // consume tells java that we will handle the close request from here by running closeProgram()
+			closeProgram();
+		});
+
 
 		ArrayList<ValueObject> userBookings = MySQLqueries.getUserPNR(user.getUsername());
 
@@ -56,15 +63,14 @@ public class UsersReservedBuses extends Application {
 		ComboBox<String> pnrList = new ComboBox<>();
 		pnrList.setPromptText(user.getFirstName() + "'s Reservations");
 		pnrList.getItems().addAll(getBookingPNRs(userBookings));
-
 		Button displayButton = new Button("Display Reservation");
+
 
 		pane.setPadding(new Insets(11)); //set 11px border
 		pane.setAlignment(Pos.TOP_LEFT);
 		pane.setHgap(5);//set horizontal gap
 		pane.setVgap(5);//set vertical gap
-
-
+    
 		GridPane.setConstraints(reservationLabel, 5, 2);
 		GridPane.setConstraints(pnrList, 6, 2);
 		GridPane.setConstraints(mainMenuButton, 5, 12);
@@ -79,6 +85,7 @@ public class UsersReservedBuses extends Application {
 		window.setScene(scene1);
 		window.setTitle("User's Reserved Buses");
 
+
 		displayButton.setOnAction(e -> {
 			ValueObject selectedVO = new ValueObject();
 
@@ -90,7 +97,7 @@ public class UsersReservedBuses extends Application {
 
 			// clear previous pane to display secQ and allow user to enter an answer
 			pane.getChildren().clear();
-
+      
 			// create labels to display reservation information
 			Label pnrLabel = new Label("PNR:");
 			Label pnrDisplay = new Label(selectedVO.getPnr());
@@ -108,16 +115,16 @@ public class UsersReservedBuses extends Application {
 			deleteButton.setOnAction(i -> {
 				// calls delete reservation method which will delete reservation
 				MySQLqueries.deleteReservation(pnrList.getValue());
-				//	pnrList.getSelectionModel().clearSelection();//clear selection from drop box
+
+			//	pnrList.getSelectionModel().clearSelection();//clear selection from drop box
 				pnrList.getItems().clear();//clear list from drop box
 				pnrList.getItems().addAll(getBookingPNRs(MySQLqueries.getUserPNR(user.getUsername())));
 				pane.getChildren().clear();
 				pane.getChildren().addAll(reservationLabel, pnrList, displayButton, mainMenuButton);
 				// Set the scene
 				window.setScene(scene1);
-
 			});
-
+      
 			GridPane.setConstraints(deleteButton, 6, 12);
 			GridPane.setConstraints(pnrLabel, 5, 5);
 			GridPane.setConstraints(pnrDisplay, 6, 5);
@@ -133,8 +140,6 @@ public class UsersReservedBuses extends Application {
 			pane.getChildren().addAll(reservationLabel, pnrList, displayButton, pnrLabel, pnrDisplay, busLabel, busDisplay,
 					originLabel, originDisplay, destinationLabel, destinationDisplay, dateLabel, dateDisplay,
 					deleteButton, mainMenuButton);
-
-
 
 			// Set the scene
 			window.setScene(scene1);
@@ -157,5 +162,27 @@ public class UsersReservedBuses extends Application {
 
 		return list;
 	}
-
+	
+	//method to extract pnr from user bookings 
+	public static ArrayList<String> getBookingPNRs(ArrayList<ValueObject> vo) {
+		
+		ArrayList<String> list = new ArrayList<>();
+		
+		for (int i = 0; i < vo.size(); i++) {
+			list.add(vo.get(i).getPnr());
+		}
+		
+		return list;
+	}
+	
+	private void closeProgram() {
+		boolean confirm = ConfirmBox.display("Close Program?", "Are you sure you want to close?");
+		
+		if (confirm) {
+			
+			window.close();
+		} 
+	}
+	
 }
+

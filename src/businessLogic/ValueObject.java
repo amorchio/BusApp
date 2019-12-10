@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Date;
 
-public class ValueObject {
-
+public class ValueObject implements Reservation {
+  
 	private int capacity;
 	private String origin;
 	private String destination;
@@ -81,7 +81,7 @@ public class ValueObject {
 
 	//constructor to create a new bus
 	public ValueObject(int busID, String origin, String departTime, String destination,
-					   String arrivalTime, int capacity) {
+			String arrivalTime, int capacity) {
 		this.busID = busID;
 		this.origin = origin;
 		this.departTime = departTime;
@@ -280,7 +280,15 @@ public class ValueObject {
 	public void setPNR(String pnr) {
 		this.pnr = pnr;
 	}
-
+	//Overloading
+	public void setPNR (ValueObject vo) {
+		String pnr = vo.generatePNR();
+		this.pnr = pnr;
+	}
+	
+	
+	
+}
 
 	public void addBus(int bNum, String text, String text1, String text2, String text3, String text4, String text5, int cCap, int mCap) {
 	}

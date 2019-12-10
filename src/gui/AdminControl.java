@@ -1,10 +1,10 @@
 package gui;
 import businessLogic.ValueObject;
 import java.sql.SQLException;
+
 import java.sql.Time;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import database.MySQLqueries;
 import javafx.scene.control.Dialog;
 import javafx.application.Application;
@@ -67,6 +67,7 @@ public class AdminControl extends Application{
     private TextField toTime = new TextField("00:00:00");
     private TextField fldCurrentCapacity = new TextField();
     private TextField fldMaxCapacity = new TextField();
+
 //checkDate method
     private static boolean checkDateF(String departureDate,String arrivalDate) {
         return departureDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$") && arrivalDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
@@ -105,13 +106,15 @@ public class AdminControl extends Application{
         grid.add(maxCapacity, 8, 1);
 
         ValueObject vo = new ValueObject();
+
         ArrayList<String> s1 =MySQLqueries.getOriginCities();
+      
         //bustable needed
         TextArea textArea = new TextArea();
 
 
-        //adding busRide
 
+        //adding busRide
         textArea.setMinWidth(475);
         grid.setAlignment(Pos.CENTER);
         grid.add(textArea, 0, 2, 9, 1);
@@ -168,8 +171,6 @@ public class AdminControl extends Application{
         primaryStage.show();
 
         //add bus action
-
-
         btnAddBus.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
@@ -198,19 +199,29 @@ public class AdminControl extends Application{
         });
 
 
+
         btnUpdateBus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                AdminControl update = new AdminControl();
-                update.start(primaryStage);
+                try {
+                    AdminControl update = new AdminControl();
+                    update.start(primaryStage);
+                } catch (SQLException | ClassNotFoundException n) {
+                    System.out.println(n);
+                }
             }
         });
 
         btnDeleteBus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+            try {
                 AdminControl delete = new AdminControl();
                 delete.start(primaryStage);
+                }
+            catch (SQLException | ClassNotFoundException n) {
+                    System.out.println(n);
+                }
             }
         });
 
@@ -219,6 +230,7 @@ public class AdminControl extends Application{
             back.start(new Stage());
 
         });
+
 
 
 

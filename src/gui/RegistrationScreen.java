@@ -39,6 +39,7 @@ public class RegistrationScreen extends Application {
 		Label password = new Label("Password:");
 		Label secQ = new Label("Security Question:");
 		Label secQAnswer = new Label("Answer:");
+		Label adminCode = new Label("Admin code:");
 
 		//create text boxes for user entries
 		TextField first_nameInput = new TextField();
@@ -53,6 +54,7 @@ public class RegistrationScreen extends Application {
 		PasswordField passwordInput = new PasswordField();
 		TextField secQInput = new TextField();
 		TextField secQAInput = new TextField();
+		TextField adminCodeInput = new TextField();
 		
 		//create helper message for ssn and zip
 		ssnInput.setPromptText("No dashes, e.g. 999999999");
@@ -65,15 +67,16 @@ public class RegistrationScreen extends Application {
 		
 		//create actions for button
 		registerButton.setOnAction(e -> {
-			if(MySQLqueries.newUser(last_nameInput.getText(), first_nameInput.getText(), 
+				if(MySQLqueries.newUser(last_nameInput.getText(), first_nameInput.getText(), 
 					Integer.parseInt(ssnInput.getText()), addressInput.getText(), 
 					cityInput.getText(), stateInput.getText(), Integer.parseInt(zipInput.getText()),
 					emailInput.getText(), usernameInput.getText(), passwordInput.getText(),
-					secQInput.getText(), secQAInput.getText())) {
-				MainMenu mainMenu = new MainMenu();
-				mainMenu.start(new Stage());
+					secQInput.getText(), secQAInput.getText(), adminCodeInput.getText())) {
+				
+				LoginScreen login = new LoginScreen();
+				login.start(new Stage());
 				window.close();
-			};
+			}
 			
 		});
 		
@@ -117,14 +120,16 @@ public class RegistrationScreen extends Application {
 		GridPane.setConstraints(secQInput, 1, 10);
 		GridPane.setConstraints(secQAnswer, 0, 11);
 		GridPane.setConstraints(secQAInput, 1, 11);
+		GridPane.setConstraints(adminCode, 0, 12);
+		GridPane.setConstraints(adminCodeInput, 1, 12);
 		GridPane.setConstraints(registerButton, 0, 13);
-		GridPane.setConstraints(returnButton, 0, 17);
+		GridPane.setConstraints(returnButton, 0, 17); 
 		
 		//Place nodes in the pane
 			pane.getChildren().addAll(firstName, first_nameInput, lastName, last_nameInput, ssn, ssnInput,
 					address, addressInput, city, cityInput, state, stateInput, zip, zipInput, email, emailInput,
 					username, usernameInput, password, passwordInput, secQ, secQInput,
-					secQAnswer, secQAInput,	registerButton, returnButton);
+					secQAnswer, secQAInput,	adminCode, adminCodeInput, registerButton, returnButton);
 
 		
 		// create a scene and place it in the stage/window
@@ -135,7 +140,7 @@ public class RegistrationScreen extends Application {
 		
 	}
 
-	private boolean isInt(TextField input, String message) {
+	private boolean isInt(TextField input, int low, int high) {
 		
 		try {
 			
@@ -143,7 +148,7 @@ public class RegistrationScreen extends Application {
 			int number = Integer.parseInt(input.getText());
 			
 			//check if int is a positive number less than 9 digits (to account for leading 0's)
-			if (number > 0 && number <= 999999999) {
+			if (number > low && number <= high) {
 
 				return true;
 			}

@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import businessLogic.ValueObject;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -12,6 +13,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import database.MySQLqueries;
+import javafx.scene.layout.Pane;
+import javafx.fxml.FXMLLoader;
+import java.util.ResourceBundle;
+import java.net.URL;
 
 public class LoginScreen extends Application {
 	
@@ -30,7 +35,7 @@ public class LoginScreen extends Application {
 			e.consume(); // consume tells java that we will handle the close request from here by running closeProgram()
 			closeProgram();
 		});
-				
+		
 		//create a pane and set its properties
 		GridPane pane = new GridPane();
 		pane.setPadding(new Insets(11)); // sets an 11px border
@@ -70,10 +75,14 @@ public class LoginScreen extends Application {
 			boolean login = MySQLqueries.checkLogin(usernameInput.getText(), passwordInput.getText());
 			//if true, this window should close because MySQLqueries.checkLogin will open a new window
 			if (login) {
-				window.close();
 				//retrieveInfo method is run and should return an ValueObject object. 
 				//A constructor for ValueObject(ValueObject vo is in ValueObject class
 				user = new ValueObject(MySQLqueries.retrieveInfo(usernameInput.getText()));
+				System.out.println("First namme for login is " + user.getFirstName());
+				//create new instance of MainMenu. Needs to be created after userinfo is retrieved for the right view to show
+				Main mainPg = new Main();
+				mainPg.start(new Stage());
+				window.close();
 				
 			}
 		});
