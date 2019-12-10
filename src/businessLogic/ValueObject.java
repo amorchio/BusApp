@@ -286,10 +286,18 @@ public class ValueObject implements Reservation {
 		this.pnr = pnr;
 	}
 	
-	
-	
 
 
-	public void addBus(int bNum, String text, String text1, String text2, String text3, String text4, String text5, int cCap, int mCap) {
+	public void deleteBusRide(int busRide) {
+	}
+
+	public void addBus(int bNum, String text, String text2, String text3, String text4, int cCap, int mCap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void update(int bNum, String text, String text2, String text3, String text4, int cCap, int mCap) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -73,7 +73,7 @@ public class UsersReservedBuses extends Application {
     
 		GridPane.setConstraints(reservationLabel, 5, 2);
 		GridPane.setConstraints(pnrList, 6, 2);
-		GridPane.setConstraints(mainMenuButton, 5, 12);
+		GridPane.setConstraints(mainMenuButton, 5, 15);
 		GridPane.setConstraints(displayButton, 8, 2);
 
 		pane.getChildren().addAll(reservationLabel, pnrList, displayButton, mainMenuButton);
@@ -99,6 +99,8 @@ public class UsersReservedBuses extends Application {
 			pane.getChildren().clear();
       
 			// create labels to display reservation information
+			Label usernameLabel = new Label("Username:");
+			Label usernameDisplay = new Label(selectedVO.getUsername());
 			Label pnrLabel = new Label("PNR:");
 			Label pnrDisplay = new Label(selectedVO.getPnr());
 			Label busLabel = new Label("Bus Number:");
@@ -120,24 +122,26 @@ public class UsersReservedBuses extends Application {
 				pnrList.getItems().clear();//clear list from drop box
 				pnrList.getItems().addAll(getBookingPNRs(MySQLqueries.getUserPNR(user.getUsername())));
 				pane.getChildren().clear();
-				pane.getChildren().addAll(reservationLabel, pnrList, displayButton, mainMenuButton);
+				pane.getChildren().addAll(reservationLabel, usernameLabel, usernameDisplay, pnrList, displayButton, mainMenuButton);
 				// Set the scene
 				window.setScene(scene1);
 			});
       
-			GridPane.setConstraints(deleteButton, 6, 12);
-			GridPane.setConstraints(pnrLabel, 5, 5);
-			GridPane.setConstraints(pnrDisplay, 6, 5);
-			GridPane.setConstraints(busLabel, 5, 6);
-			GridPane.setConstraints(busDisplay, 6, 6);
-			GridPane.setConstraints(originLabel, 5, 7);
-			GridPane.setConstraints(originDisplay, 6, 7);
-			GridPane.setConstraints(destinationLabel, 5, 8);
-			GridPane.setConstraints(destinationDisplay, 6, 8);
-			GridPane.setConstraints(dateLabel, 5, 9);
-			GridPane.setConstraints(dateDisplay, 6, 9);
+			GridPane.setConstraints(deleteButton, 6, 15);
+			GridPane.setConstraints(usernameLabel, 5, 5);
+			GridPane.setConstraints(usernameDisplay, 6, 5);
+			GridPane.setConstraints(pnrLabel, 5, 6);
+			GridPane.setConstraints(pnrDisplay, 6, 6);
+			GridPane.setConstraints(busLabel, 5, 7);
+			GridPane.setConstraints(busDisplay, 6, 7);
+			GridPane.setConstraints(originLabel, 5, 8);
+			GridPane.setConstraints(originDisplay, 6, 8);
+			GridPane.setConstraints(destinationLabel, 5, 9);
+			GridPane.setConstraints(destinationDisplay, 6, 9);
+			GridPane.setConstraints(dateLabel, 5, 10);
+			GridPane.setConstraints(dateDisplay, 6, 10);
 
-			pane.getChildren().addAll(reservationLabel, pnrList, displayButton, pnrLabel, pnrDisplay, busLabel, busDisplay,
+			pane.getChildren().addAll(reservationLabel, usernameLabel, usernameDisplay, pnrList, displayButton, pnrLabel, pnrDisplay, busLabel, busDisplay,
 					originLabel, originDisplay, destinationLabel, destinationDisplay, dateLabel, dateDisplay,
 					deleteButton, mainMenuButton);
 
@@ -148,19 +152,6 @@ public class UsersReservedBuses extends Application {
 
 		window.show();
 
-	}
-
-	//method to extract pnr from user bookings
-	public static ArrayList<String> getBookingPNRs(ArrayList<ValueObject> vo) {
-
-		ArrayList<String> list = new ArrayList<>();
-
-
-		for (int i = 0; i < vo.size(); i++) {
-			list.add(vo.get(i).getPnr());
-		}
-
-		return list;
 	}
 	
 	//method to extract pnr from user bookings 

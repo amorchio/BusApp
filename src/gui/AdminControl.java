@@ -1,4 +1,5 @@
 package gui;
+
 import businessLogic.ValueObject;
 import java.sql.SQLException;
 
@@ -29,212 +30,220 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.paint.Paint;
 
-public class AdminControl extends Application{
-    private Label sceneTitle = new Label("Add");
-    private Label busID = new Label("Bus ID");
-    private Label origin = new Label("origin");
-    private Label destination = new Label("destination");
-    private Label departureDate = new Label("Departure Date");
-    private Label departureTime = new Label("Departure Time");
-    private Label arriveDate = new Label("Arrival Date");
-    private Label arriveTime = new Label("Arrival Time");
-    private Label currentCapacity = new Label("CurrentSeat");
-    private Label maxCapacity = new Label("MaxSeat");
-    private  Label txtAddBus = new Label("Add a Bus:");
+public class AdminControl extends Application {
+	private Label sceneTitle = new Label("Add");
+	private Label busID = new Label("Bus ID");
+	private Label origin = new Label("origin");
+	private Label destination = new Label("destination");
+	private Label departureDate = new Label("Departure Date");
+	private Label departureTime = new Label("Departure Time");
+	private Label currentCapacity = new Label("CurrentSeat");
+	private Label maxCapacity = new Label("MaxSeat");
+	private Label txtAddBus = new Label("Add a Bus:");
 
-    // Bottom Row
-    private  Label txtBusID = new Label("Bus ID");
-    private  Label txtOrigin = new Label("origin");
-    private Label txtDestination = new Label("destination");
-    private Label txtDepartDate = new Label("Departure Date");
-    private Label txtArrivalDate = new Label("Arrival Date");
-    private Label txtDepartTime = new Label("Departure Time");
-    private Label txtArriveTime = new Label("Arrival Time");
-    private Label txtCurrentCapacity = new Label("Current Capacity");
-    private Label txtMaxCapacity = new Label("Max Capacity");
+	// Bottom Row
+	private Label txtBusID = new Label("Bus ID");
+	private Label txtOrigin = new Label("origin");
+	private Label txtDestination = new Label("destination");
+	private Label txtDepartDate = new Label("Departure Date");
+	private Label txtDepartTime = new Label("Departure Time");
+	private Label txtCurrentCapacity = new Label("Current Capacity");
+	private Label txtMaxCapacity = new Label("Max Capacity");
 
-    private Button btnAddBus = new Button("Add Bus");
-    private Button btnDeleteBus = new Button("Delete Bus");
-    private Button btnUpdateBus = new Button("Update Bus");
-    private Button btnBack = new Button("Main Menu");
+	private Button btnAddBus = new Button("Add Bus");
+	private Button btnDeleteBus = new Button("Delete Bus");
+	private Button btnUpdateBus = new Button("Update Bus");
+	private Button btnBack = new Button("Main Menu");
 
-    private TextField busIDBOX = new TextField();
-    private TextField originBOX = new TextField();
-    private TextField destinationBOX = new TextField();
-    private TextField departDateBOX = new TextField("0000-00-00");
-    private TextField arrivalDateBOX = new TextField("0000-00-00");
-    private TextField fromTime = new TextField("00:00:00");
-    private TextField toTime = new TextField("00:00:00");
-    private TextField fldCurrentCapacity = new TextField();
-    private TextField fldMaxCapacity = new TextField();
+	private TextField busIDBOX = new TextField();
+	private TextField originBOX = new TextField();
+	private TextField destinationBOX = new TextField();
+	private TextField departDateBOX = new TextField("0000-00-00");
+	private TextField fromTime = new TextField("00:00:00");
+	private TextField fldCurrentCapacity = new TextField();
+	private TextField fldMaxCapacity = new TextField();
 
 //checkDate method
-    private static boolean checkDateF(String departureDate,String arrivalDate) {
-        return departureDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$") && arrivalDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
-    }
 
-    private static boolean checkCities(String originCity, String destinationCity){
-        return originCity.matches("[A-Z]{3}") && destinationCity.matches("[A-Z]{3}");
-    }
+	private static boolean checkBusId(String busId) {
+		return busId.matches("., '^[0-9]{4}$");
+	}
 
-        private static  boolean checkTime(String departTime, String arrivalTime){
-            return departTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$") && arrivalTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
+	private static boolean checkDateF(String departureDate) { // String arrivalDate) {
+		return departureDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
+	}
 
-        }
+	private static boolean checkCities(String originCity, String destinationCity) {
+		return originCity.matches("[A-Z]{3}") && destinationCity.matches("[A-Z]{3}");
+	}
 
-    //check origin and destination method
+	private static boolean checkTime(String departTime) {// String arrivalTime){
+		return departTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
 
+	}
 
+	// check origin and destination method
 
+	@Override
+	public void start(Stage primaryStage) {
 
-    @Override
-    public void start(Stage primaryStage) {
+		HBox hBoxTitle = new HBox(15);
+		hBoxTitle.getChildren().addAll(sceneTitle);
+		hBoxTitle.setAlignment(Pos.CENTER);
 
-        HBox hBoxTitle = new HBox(15);
-        hBoxTitle.getChildren().addAll(sceneTitle);
-        hBoxTitle.setAlignment(Pos.CENTER);
+		GridPane grid = new GridPane();
+		grid.add(busID, 0, 1);
+		grid.add(origin, 1, 1);
+		grid.add(destination, 2, 1);
+		grid.add(departureDate, 3, 1);
+		grid.add(departureTime, 5, 1);
+		grid.add(currentCapacity, 7, 1);
+		grid.add(maxCapacity, 8, 1);
 
-        GridPane grid = new GridPane();
-        grid.add(busID, 0, 1);
-        grid.add(origin, 1, 1);
-        grid.add(destination, 2, 1);
-        grid.add(departureDate, 3, 1);
-        grid.add(arriveDate, 4, 1);
-        grid.add(departureTime, 5, 1);
-        grid.add(arriveTime, 6, 1);
-        grid.add(currentCapacity, 7, 1);
-        grid.add(maxCapacity, 8, 1);
+		ValueObject vo = new ValueObject();
 
-        ValueObject vo = new ValueObject();
+		ArrayList<String> s1 = MySQLqueries.getOriginCities();
 
-        ArrayList<String> s1 =MySQLqueries.getOriginCities();
-      
-        //bustable needed
-        TextArea textArea = new TextArea();
+		// bustable needed
+		TextArea textArea = new TextArea();
 
+		// adding busRide
+		textArea.setMinWidth(475);
+		grid.setAlignment(Pos.CENTER);
+		grid.add(textArea, 0, 2, 9, 1);
+		grid.add(txtAddBus, 0, 3);
+		grid.setHgap(15);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(25, 25, 25, 25));
 
+		GridPane gridBtm = new GridPane();
+		gridBtm.setHgap(10);
+		gridBtm.setVgap(10);
+		gridBtm.setPadding(new Insets(25, 25, 25, 25));
 
-        //adding busRide
-        textArea.setMinWidth(475);
-        grid.setAlignment(Pos.CENTER);
-        grid.add(textArea, 0, 2, 9, 1);
-        grid.add(txtAddBus, 0, 3);
-        grid.setHgap(15);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+		gridBtm.add(txtAddBus, 0, 0);
+		gridBtm.add(txtBusID, 0, 1);
+		gridBtm.add(busIDBOX, 1, 1, 3, 1);
+		gridBtm.add(txtOrigin, 0, 2);
+		gridBtm.add(originBOX, 1, 2);
+		gridBtm.add(txtDestination, 2, 2);
+		gridBtm.add(destinationBOX, 3, 2);
+		gridBtm.add(txtDepartDate, 0, 3);
+		gridBtm.add(departDateBOX, 1, 3);
+		gridBtm.add(txtDepartTime, 0, 4);
+		gridBtm.add(fromTime, 1, 4);
+		gridBtm.add(txtMaxCapacity, 0, 5);
+		gridBtm.add(fldMaxCapacity, 1, 5);
+		gridBtm.add(txtCurrentCapacity, 2, 5);
+		gridBtm.add(fldCurrentCapacity, 3, 5);
+		gridBtm.add(btnAddBus, 1, 6, 3, 1);
+		btnAddBus.setMinWidth(500);
 
-        GridPane gridBtm = new GridPane();
-        gridBtm.setHgap(10);
-        gridBtm.setVgap(10);
-        gridBtm.setPadding(new Insets(25, 25, 25, 25));
+		gridBtm.add(btnBack, 1, 8, 2, 1);
+		btnBack.setMinWidth(150);
+		gridBtm.add(btnUpdateBus, 2, 8);
+		btnUpdateBus.setMinWidth(150);
+		gridBtm.add(btnDeleteBus, 3, 8);
+		btnDeleteBus.setMinWidth(150);
 
-        gridBtm.add(txtAddBus, 0, 0);
-        gridBtm.add(txtBusID, 0, 1);
-        gridBtm.add(busIDBOX, 1, 1, 3, 1);
-        gridBtm.add(txtOrigin, 0, 2);
-        gridBtm.add(originBOX, 1, 2);
-        gridBtm.add(txtDestination, 2, 2);
-        gridBtm.add(destinationBOX, 3, 2);
-        gridBtm.add(txtDepartDate, 0, 3);
-        gridBtm.add(departDateBOX, 1, 3);
-        gridBtm.add(txtArrivalDate, 2, 3);
-        gridBtm.add(arrivalDateBOX, 3, 3);
-        gridBtm.add(txtDepartTime, 0, 4);
-        gridBtm.add(fromTime, 1, 4);
-        gridBtm.add(txtArriveTime, 2, 4);
-        gridBtm.add(toTime, 3, 4);
-        gridBtm.add(txtMaxCapacity, 0, 5);
-        gridBtm.add(fldMaxCapacity, 1, 5);
-        gridBtm.add(txtCurrentCapacity, 2, 5);
-        gridBtm.add(fldCurrentCapacity, 3, 5);
-        gridBtm.add(btnAddBus, 1, 6, 3, 1);
-        btnAddBus.setMinWidth(500);
+		gridBtm.setAlignment(Pos.CENTER);
+		gridBtm.setPadding(new Insets(25, 25, 25, 25));
+		gridBtm.setHgap(10);
+		gridBtm.setVgap(10);
 
-        gridBtm.add(btnBack, 1, 8, 2, 1);
-        btnBack.setMinWidth(150);
-        gridBtm.add(btnUpdateBus, 2, 8);
-        btnUpdateBus.setMinWidth(150);
-        gridBtm.add(btnDeleteBus, 3, 8);
-        btnDeleteBus.setMinWidth(150);
+		VBox vbox = new VBox(20);
+		Scene sceneText = new Scene(vbox, 700, 700);
+		vbox.getChildren().addAll(hBoxTitle, grid, gridBtm);
+		vbox.setAlignment(Pos.CENTER);
+		primaryStage.setTitle("Add/Update/Delete Bus Rides"); // set title
+		primaryStage.setScene(sceneText);
+		primaryStage.show();
 
-        gridBtm.setAlignment(Pos.CENTER);
-        gridBtm.setPadding(new Insets(25, 25, 25, 25));
-        gridBtm.setHgap(10);
-        gridBtm.setVgap(10);
+		// add bus action
+		btnAddBus.setOnAction(e -> {
 
-        VBox vbox = new VBox(20);
-        Scene sceneText = new Scene(vbox, 700, 700);
-        vbox.getChildren().addAll(hBoxTitle, grid, gridBtm);
-        vbox.setAlignment(Pos.CENTER);
-        primaryStage.setTitle("Add/Update/Delete Bus Rides"); // set title
-        primaryStage.setScene(sceneText);
-        primaryStage.show();
+			// ValueObject vc = new ValueObject();
+			if (checkBusId(busIDBOX.getText()) != true) {
+				AlertBox.display("INVALID BUS NUMBER", "Enter four numbers (ex. 9999,0000)");
 
-        //add bus action
-        btnAddBus.setOnAction(e -> {
+			} else if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
+				AlertBox.display("INVALID CITY", "Enter as City, ST code (ex. Atlanta, GA, etc)");
 
-             //   ValueObject vc = new ValueObject();
-                if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
-                    AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
+			} else if (checkDateF(departDateBOX.getText()) != true) {
+				AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
 
+			} else if (checkTime(fromTime.getText()) != true) {
+				AlertBox.display("INVALID TIME", " Enter as HH:MM:SS (ex. 12:56:00, 16:32:00, etc)");
 
-                } else if (checkDateF(departDateBOX.getText(),arrivalDateBOX.getText()) != true) {
-                    AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
+			} else {
 
-                } else if (checkTime(fromTime.getText(), toTime.getText()) != true) {
-                    AlertBox.display("INVALID TIME", " Enter as HH:MM (ex. 12:56, 16:32, etc)");
+				int bNum = Integer.parseInt(busIDBOX.getText());
+				int cCap = Integer.parseInt(fldCurrentCapacity.getText());
+				int mCap = Integer.parseInt(fldMaxCapacity.getText());
+				vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
+						fromTime.getText(), cCap, mCap);
+				AlertBox.display("Bus Ride", "Successfully Added");
+				AdminControl add = new AdminControl();
+				add.start(primaryStage);
+			}
+		});
 
-                } else {
+		btnUpdateBus.setOnAction(e -> {
+			try {
+				AdminControl update = new AdminControl();
+				update.start(primaryStage);
+			} catch (Exception n) {
+				n.printStackTrace();
+				;
+			}
 
-                    int bNum = Integer.parseInt(busIDBOX.getText());
-                    int cCap = Integer.parseInt(fldCurrentCapacity.getText());
-                    int mCap = Integer.parseInt(fldMaxCapacity.getText());
-                    vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
-                            arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
-                    AlertBox.display("Bus Ride", "Successfully Added");
-                    AdminControl add = new AdminControl();
-                    add.start(primaryStage);
-                }
-        });
+		});
+		
+		
+		if (checkBusId(busIDBOX.getText()) != true) {
+			AlertBox.display("INVALID BUS NUMBER", "Enter four numbers (ex. 9999,0000)");
 
+		} else if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
+			AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
 
+		} else if (checkDateF(departDateBOX.getText()) != true) {
+			AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
 
-        btnUpdateBus.setOnAction(e -> {
-                try {
-                    AdminControl update = new AdminControl();
-                    update.start(primaryStage);
-                } catch (Exception n) {
-                    n.printStackTrace();;
-                }
-            
-        });
+		} else if (checkTime(fromTime.getText()) != true) {
+			AlertBox.display("INVALID TIME", " Enter as HH:MM:SS (ex. 12:56:00, 16:32:00, etc)");
 
-        btnDeleteBus.setOnAction(e -> {
-            try {
-                AdminControl delete = new AdminControl();
-                delete.start(primaryStage);
-                }
-            catch (Exception n) {
-                    n.printStackTrace();;
-                }
-            
-        });
+		} else {
 
-        btnBack.setOnAction(e -> {
-            Main back = new Main();
-            back.start(new Stage());
+			int bNum = Integer.parseInt(busIDBOX.getText());
+			int cCap = Integer.parseInt(fldCurrentCapacity.getText());
+			int mCap = Integer.parseInt(fldMaxCapacity.getText());
+			vo.update(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(), fromTime.getText(),
+					cCap, mCap);
+			AlertBox.display("Bus Ride", "Successfully Updated");
+			AdminControl update = new AdminControl();
+			update.start(primaryStage);
 
-        });
+		}
+		
+	
 
+	btnDeleteBus.setOnAction(e->{try{
 
+	int busRide = Integer.parseInt(busIDBOX.getText());vo.deleteBusRide(busRide);
+	AdminControl delete = new AdminControl();delete.start(primaryStage);}catch(
+	Exception n){n.printStackTrace();;}
 
+	});
 
-    }
-    public static void main(String[]args){
+	btnBack.setOnAction(e->{
+	Main back = new Main();back.start(new Stage());
+
+	});
+
+	}
+
+	public static void main(String[]args){
         Application.launch(args);
     }
-
-
-
 
 }

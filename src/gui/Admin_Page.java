@@ -91,7 +91,10 @@ public class Admin_Page extends Application{
 
         //BusUpdateAction
 
-
+        updateBusRide.setOnAction(f->{
+           AdminControl update = new AdminControl();
+            update.start(welcome);
+        });
 
 
 
