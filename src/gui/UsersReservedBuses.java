@@ -41,6 +41,11 @@ public class UsersReservedBuses extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		window = primaryStage;
+		
+		window.setOnCloseRequest(e -> {
+			e.consume(); // consume tells java that we will handle the close request from here by running closeProgram()
+			closeProgram();
+		});
 
 		ArrayList<ValueObject> userBookings = MySQLqueries.getUserPNR(user.getUsername());
 
@@ -157,5 +162,14 @@ public class UsersReservedBuses extends Application {
 		
 		return list;
 	}
-
+	
+	private void closeProgram() {
+		boolean confirm = ConfirmBox.display("Close Program?", "Are you sure you want to close?");
+		
+		if (confirm) {
+			
+			window.close();
+		} 
+	}
+	
 }

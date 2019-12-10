@@ -93,8 +93,9 @@ public class MySQLqueries {
 	
 	public static boolean newUser(String lastName, String firstName, int ssn, String address,
 			String city, String state, int zip, String email, String username, String password,
-			String secQ, String secQAnswer) {
+			String secQ, String secQAnswer, String adminCode) {
 		
+		ValueObject user = new ValueObject();
 
 		try {
 
@@ -102,9 +103,9 @@ public class MySQLqueries {
 			
 			//mysql insert statement
 			String queryString = "INSERT INTO " +
-					"busbookingapp.user (username, ssn, first_name, last_name, " +
-					"address, city, state, zip, password, email, secQ, secQAnswer) " + 
-					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					"busbookingapp.user (username, ssn, firstname, lastname, " +
+					"address, city, state, zip, password, email, secQ, secQAnswer, isAdmin) " + 
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			
 			//create the mysql insert preparedstatement
@@ -121,6 +122,13 @@ public class MySQLqueries {
 			preparedStatement.setString(10, email);
 			preparedStatement.setString(11, secQ);
 			preparedStatement.setString(12, secQAnswer);
+			
+			//check if user keyed correct admin code
+			if (adminCode.equals("gatekeeper")) {
+				preparedStatement.setBoolean(13, true);
+			} else {
+				preparedStatement.setBoolean(13, false);
+			}
 			
 			//execute preparedStatement
 			preparedStatement.execute();

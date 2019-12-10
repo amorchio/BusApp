@@ -30,6 +30,10 @@ public class BusReservation extends Application{
 	@Override
 	public void start(Stage primaryStage) {
 		window = primaryStage;
+		window.setOnCloseRequest(e -> {
+			e.consume(); // consume tells java that we will handle the close request from here by running closeProgram()
+			closeProgram();
+		});
 		
 		Label dateLabel = new Label("Departure Date: ");
 		Label originLabel = new Label("Departure City: ");
@@ -196,6 +200,15 @@ public class BusReservation extends Application{
 		UsersReservedBuses booking = new UsersReservedBuses();
 		booking.start(new Stage());
 		
+	}
+		
+	private void closeProgram() {
+		boolean confirm = ConfirmBox.display("Close Program?", "Are you sure you want to close?");
+		
+		if (confirm) {
+			
+			window.close();
+		} 
 	}
 
 }
