@@ -1,15 +1,13 @@
 package businessLogic;
 
-import java.util.Date;
-
-
 public class ValueObject {
 
 	private int capacity;
 	private String origin;
 	private String destination;
-	private Date departTime;
-	private Date arrivalTime;
+	private String busDate;
+	private String departTime;
+	private String arrivalTime;
 	private int busID;
 	private String pnr;
 	private String firstName;
@@ -25,13 +23,14 @@ public class ValueObject {
 	private String secQ;
 	private String secQAnswer;
 	private int admin;
-	
+
+	//no arg constructor
 	public ValueObject() {
-		
+
 	}
-	
-	//Constructor to create a value object from a valueobject. Mainly want to use for retrieving user info
-	//from LoginScreen
+
+	//Constructor to create a value object from a valueobject.
+	//Mainly want to use for retrieving user info from LoginScreen
 	public ValueObject(ValueObject vo) {
 		this.firstName = vo.firstName;
 		this.lastName = vo.lastName;
@@ -47,12 +46,12 @@ public class ValueObject {
 		this.secQAnswer = vo.secQAnswer;
 		this.admin = vo.admin;
 	}
-	
+
 	//constructor to create a user
 	public ValueObject(String firstName, String lastName, String username, int ssn,
-			String address, String city, String state, int zip, String password, 
-			String email, String secQ, String secQAnswer) {
-		
+					   String address, String city, String state, int zip, String password,
+					   String email, String secQ, String secQAnswer) {
+
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
@@ -65,20 +64,20 @@ public class ValueObject {
 		this.email = email;
 		this.secQ = secQ;
 		this.secQAnswer = secQAnswer;
-		
+
 	}
-	
+
 	//constructor to create a reservation
 	public ValueObject(int busID, String username) {
-		
-		pnr = generatePNR();
+
+		this.pnr = generatePNR();
 		this.busID = busID;
 		this.username = username;
 	}
-	
+
 	//constructor to create a new bus
-	public ValueObject(int busID, String origin, Date departTime, String destination,
-			Date arrivalTime, int capacity) {
+	public ValueObject(int busID, String origin, String departTime, String destination,
+					   String arrivalTime, int capacity) {
 		this.busID = busID;
 		this.origin = origin;
 		this.departTime = departTime;
@@ -99,11 +98,11 @@ public class ValueObject {
 		return destination;
 	}
 
-	public Date getDepartTime() {
+	public String getDepartTime() {
 		return departTime;
 	}
 
-	public Date getArrivalTime() {
+	public String getArrivalTime() {
 		return arrivalTime;
 	}
 
@@ -175,12 +174,24 @@ public class ValueObject {
 		this.destination = destination;
 	}
 
-	public void setDepartTime(Date departTime) {
+	public void setDepartTime(String departTime) {
 		this.departTime = departTime;
 	}
 
-	public void setArrivalTime(Date arrivalTime) {
+	public void setArrivalTime(String arrivalTime) {
 		this.arrivalTime = arrivalTime;
+	}
+
+	public String getBusDate() {
+		return busDate;
+	}
+
+	public int getAdmin() {
+		return admin;
+	}
+
+	public void setBusDate(String busDate) {
+		this.busDate = busDate;
 	}
 
 	public void setBusID(int busID) {
@@ -234,11 +245,11 @@ public class ValueObject {
 	public void setSecQAnswer(String secQAnswer) {
 		this.secQAnswer = secQAnswer;
 	}
-	
+
 	public void setAdmin(int admin ) {
 		this.admin = admin;
 	}
-	
+
 	//method to generate a unique reservation number
 	public String generatePNR() {
 
@@ -248,7 +259,7 @@ public class ValueObject {
 		for (int i = 0; i < 3; i++) {
 			pnr += (char) ((Math.random() * 9) + 49) + ""; //omit 0 since it can be confused with letter o
 		}
-		
+
 		// generates 3 random uppercase letters and appends them to pnr
 		for (int i = 0; i < 3; i++) {
 			pnr += (char) ((Math.random() * 26) + 65) + "";
@@ -261,10 +272,6 @@ public class ValueObject {
 	public void setPNR(String pnr) {
 		this.pnr = pnr;
 	}
-	
-	
+
+
 }
-
-
-
-
