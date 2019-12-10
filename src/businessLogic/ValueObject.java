@@ -1,6 +1,6 @@
 package businessLogic;
 
-public class ValueObject {
+public class ValueObject implements Reservation {
 
 	private int capacity;
 	private String origin;

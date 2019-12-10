@@ -18,7 +18,8 @@ public class MySQLqueries {
 	static ValueObject bus = new ValueObject();
 	static ValueObject reservation = new ValueObject();
 	static ValueObject user = new ValueObject();
-	static Calendar est = Calendar.getInstance(TimeZone.getTimeZone("EST")); //set a calendar because results from the jdbc were 1 day off
+	//set a calendar because results from the jdbc were 1 day off
+	static Calendar est = Calendar.getInstance(TimeZone.getTimeZone("EST")); 
 	
 	public static Connection initializeDB() {
 
@@ -36,8 +37,7 @@ public class MySQLqueries {
 		}
 		
 		return null;
-
-		
+		 
 	}
 	
 	public static boolean checkLogin(String username, String password) {
@@ -76,9 +76,6 @@ public class MySQLqueries {
 			} else {
 				//display error if username is not found
 				AlertBox.display("Login Error", "Username not found. Please register as a new user.");
-				
-				//close connection
-			//	connection.close();
 				
 				return false;
 			}
@@ -133,13 +130,7 @@ public class MySQLqueries {
 			//execute preparedStatement
 			preparedStatement.execute();
 			
-			//close the connection to the database
-			//connection.close();
-			
 			return true;
-			
-			
-			
 
 		} catch (Exception ex) {
 			
@@ -327,17 +318,9 @@ public class MySQLqueries {
 				user.setCity(rset.getString("city"));
 				user.setState(rset.getString("state"));
 				user.setZip(rset.getInt("zip"));
-		//		user.setPassword(rset.getString("password"));  		//Not needed after a user is authenticated by the checkLogin method
 				user.setEmail(rset.getString("email"));
-		//		user.setSecQ(rset.getString("secQ"));				//Not needed after a user is authenticated by the checkLogin method
-		//		user.setSecQAnswer(rset.getString("secQAnswer"));	//Not needed after a user is authenticated by the checkLogin method
 				user.setAdmin(rset.getInt("isAdmin"));
 				
-
-				
-			//close the connection to the database
-			//connection.close();
-			
 			}
 			return user;			
 
@@ -410,7 +393,8 @@ public class MySQLqueries {
 		return busResults;
 	}
 	
-	//Reserving a bus method that will update the database. Initial check on whether or not user has already booked the same bus should happen in the businessLogic
+	//Reserving a bus method that will update the database. Initial check on whether or not 
+	//the user has already booked the same bus should happen in the businessLogic
 	public static void reserveBus(String username, int busID, int capacity) {
 		//Generate PNR
 		String userPNR = bus.generatePNR();
@@ -489,10 +473,7 @@ public class MySQLqueries {
 				
 			}
 			
-			
-			
 		}
-			
 
 		 catch (Exception ex) {
 			
