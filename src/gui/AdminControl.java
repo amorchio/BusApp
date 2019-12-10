@@ -64,8 +64,13 @@ public class AdminControl extends Application{
     private TextField fldCurrentCapacity = new TextField();
     private TextField fldMaxCapacity = new TextField();
 
+    private static boolean checkDateF(String busDate) {
+        return busDate.matches("^(20)\\d\\dd([-])(0[1-9]|1{012})([-])(0[1-9]|[12][0-9]|3[01])$");
+    }
+
+
     @Override
-    public void start(Stage primaryStage) throws ClassNotFoundException, SQLException{
+    public void start(Stage primaryStage) throws ClassNotFoundException, SQLException {
 
         HBox hBoxTitle = new HBox(15);
         hBoxTitle.getChildren().addAll(sceneTitle);
@@ -84,10 +89,7 @@ public class AdminControl extends Application{
 
         ValueObject vo = new ValueObject();
         //bustable needed
-        TextArea textArea =new TextArea();
-
-
-
+        TextArea textArea = new TextArea();
 
 
         //adding flight
@@ -143,41 +145,40 @@ public class AdminControl extends Application{
         Scene sceneText = new Scene(vbox, 700, 700);
         vbox.getChildren().addAll(hBoxTitle, grid, gridBtm);
         vbox.setAlignment(Pos.CENTER);
-        primaryStage.setTitle("Add/Update/Delete Flights"); // set title
+        primaryStage.setTitle("Add/Update/Delete Bus Rides"); // set title
         primaryStage.setScene(sceneText);
         primaryStage.show();
 
         //add bus action
-        btnAddBus.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        //btnA//ddBus.setOnAction(new EventHandler<ActionEvent>() {
 
-                ValueObject vc = new ValueObject();
-                if (vo.getDepartTime(departDateBOX.getText()) != true
-                        && vo.getArrivalTime(arrivalDateBOX.getText()) != true) {
-                    Label actionTarget = new Label(
-                            "INVALID DATE. Enter as YYYY/MM/DD (ex. 2018/12/09, 2018/07/27, etc)");
-                    grid.add(actionTarget, 1, 7, 3, 1);
+
+        ValueObject vc = new ValueObject();
+       /* if (checkDateF(departDateBOX.getText()) != true
+                && checkDateF(arrivalDateBOX.getText()) != true) {
+            Label actionTarget = new Label(
+                    "INVALID DATE. Enter as YYYY/MM/DD (ex. 2018/12/09, 2018/07/27, etc)");
+            grid.add(actionTarget, 1, 7, 3, 1);
 //time check
 
-                } else {
+        } else {
 
-                    try {
-                        int fNum = Integer.parseInt(busIDBOX.getText());
-                        int cCap = Integer.parseInt(fldCurrentCapacity.getText());
-                        int mCap = Integer.parseInt(fldMaxCapacity.getText());
-                        vo.addBus(fNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
-                                arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
-                        System.out.println("Flight Successfully Added");
-                        AdminControl add = new AdminControl();
+            try {
+                int fNum = Integer.parseInt(busIDBOX.getText());
+                int cCap = Integer.parseInt(fldCurrentCapacity.getText());
+                int mCap = Integer.parseInt(fldMaxCapacity.getText());
+                vo.addBus(fNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
+                        arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
+                System.out.println("Flight Successfully Added");
+                AdminControl add = new AdminControl();
 
-                        add.start(primaryStage);
-                    } catch (SQLException | ClassNotFoundException n) {
-                        System.out.println(n);
-                    }
-                }
+                add.start(primaryStage);
+            } catch (SQLException | ClassNotFoundException n) {
+                System.out.println(n);
             }
-        });
+        }*/
+
+
         btnUpdateBus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
