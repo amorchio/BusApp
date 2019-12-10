@@ -282,4 +282,6 @@ public class ValueObject {
 	}
 
 
+	public void addBus(int bNum, String text, String text1, String text2, String text3, String text4, String text5, int cCap, int mCap) {
+	}
 }

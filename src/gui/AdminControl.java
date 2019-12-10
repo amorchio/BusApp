@@ -69,7 +69,7 @@ public class AdminControl extends Application{
     private TextField fldMaxCapacity = new TextField();
 //checkDate method
     private static boolean checkDateF(String busDate) {
-        return busDate.matches("^(20)\\d\\dd([-])(0[1-9]|1{012})([-])(0[1-9]|[12][0-9]|3[01])$");
+        return busDate.matches("^(19|20)\\d\\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$ ");
     }
 
     private static boolean checkCities(String originCity, String destinationCity){
@@ -105,6 +105,7 @@ public class AdminControl extends Application{
         grid.add(maxCapacity, 8, 1);
 
         ValueObject vo = new ValueObject();
+        ArrayList<String> s1 =MySQLqueries.getOriginCities();
         //bustable needed
         TextArea textArea = new TextArea();
 
@@ -169,61 +170,55 @@ public class AdminControl extends Application{
         //add bus action
 
 
-        btnAddBus.setOnAction(new EventHandler<ActionEvent>() {
-                                  @Override
-                                  public void handle(ActionEvent event) {
-                                      ValueObject vc = new ValueObject();
-                                      if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
-                                          AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
+        btnAddBus.setOnAction(new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ValueObject vc = new ValueObject();
+                if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
+                    AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
 
-                                      } else if (checkDateF(departDateBOX.getText()) != true
-                                              && checkDateF(arrivalDateBOX.getText()) != true) {
-                                          AlertBox.display("INVALID DATE", " Enter as YYYY/MM/DD (ex. 2018/12/09, 2018/07/27, etc)");
 
-                                      } else if (checkTime(txtDepartTime.getText(), txtArriveTime.getText()) != true) {
-                                          AlertBox.display("INVALID TIME", " Enter as HH:MM (ex. 12:56, 16:32, etc)");
+                } else if (checkDateF(departDateBOX.getText()) != true && checkDateF(arrivalDateBOX.getText()) != true) {
+                    AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
 
-                                      } else {
+                } else if (checkTime(txtDepartTime.getText(), txtArriveTime.getText()) != true) {
+                    AlertBox.display("INVALID TIME", " Enter as HH:MM (ex. 12:56, 16:32, etc)");
 
-                                          try {
-                                              int bNum = Integer.parseInt(busIDBOX.getText());
-                                              int cCap = Integer.parseInt(fldCurrentCapacity.getText());
-                                              int mCap = Integer.parseInt(fldMaxCapacity.getText());
-                                              vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
-                                                      arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
-                                              System.out.println("Bus Ride Successfully Added");
-                                              AdminControl add = new AdminControl();
-                                              add.start(primaryStage);
-                                          } catch (SQLException | ClassNotFoundException n) {
-                                              System.out.println(n);
-                                          }
-                                      }
-                                  }
-                              });
+                } else {
+
+                    int bNum = Integer.parseInt(busIDBOX.getText());
+                    int cCap = Integer.parseInt(fldCurrentCapacity.getText());
+                    int mCap = Integer.parseInt(fldMaxCapacity.getText());
+                    vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
+                            arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
+                    System.out.println("Bus Ride Successfully Added");
+                    AdminControl add = new AdminControl();
+                    add.start(primaryStage);
+                }
+            }
+        });
 
 
         btnUpdateBus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                try {
-                    AdminControl update = new AdminControl();
-                    update.start(primaryStage);
-                } catch (SQLException | ClassNotFoundException n) {
-                    System.out.println(n);
-                }
+                AdminControl update = new AdminControl();
+                update.start(primaryStage);
             }
         });
 
         btnDeleteBus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                try {
-                    AdminControl delete = new AdminControl();
-                    delete.start(primaryStage);
-                } catch (SQLException | ClassNotFoundException n) {
-                    System.out.println(n);
-                }
+                AdminControl delete = new AdminControl();
+                delete.start(primaryStage);
             }
+        });
+
+        btnBack.setOnAction(e -> {
+            Main back = new Main();
+            back.start(new Stage());
+           
         });
 
 

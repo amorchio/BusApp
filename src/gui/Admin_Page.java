@@ -73,20 +73,12 @@ public class Admin_Page extends Application{
 
         //Admin Class Tools Button
         addABusRide.setOnAction(e -> {
-            try{
-                AdminControl add = new AdminControl();
-                add.start(welcome);
-            }catch(SQLException | ClassNotFoundException l) {
-                System.out.println(l);
-            }
+            AdminControl add = new AdminControl();
+            add.start(welcome);
         });
         deleteBusRide.setOnAction(e -> {
-            try {
-                AdminControl delete = new AdminControl();
-                delete.start(welcome);
-            } catch (SQLException | ClassNotFoundException n) {
-                System.out.println(n);
-            }
+            AdminControl delete = new AdminControl();
+            delete.start(welcome);
         });
 
         //BusUpdateAction
