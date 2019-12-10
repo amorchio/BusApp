@@ -272,6 +272,12 @@ public class ValueObject implements Reservation {
 	public void setPNR(String pnr) {
 		this.pnr = pnr;
 	}
+	//Overloading
+	public void setPNR (ValueObject vo) {
+		String pnr = vo.generatePNR();
+		this.pnr = pnr;
+	}
+	
 	
 	
 }
