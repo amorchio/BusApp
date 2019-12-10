@@ -1,7 +1,11 @@
 package businessLogic;
 
-public class ValueObject implements Reservation {
+import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
 
+public class ValueObject implements Reservation {
+  
 	private int capacity;
 	private String origin;
 	private String destination;
@@ -23,13 +27,13 @@ public class ValueObject implements Reservation {
 	private String secQ;
 	private String secQAnswer;
 	private int admin;
-	
+
 	//no arg constructor
 	public ValueObject() {
-		
+
 	}
-	
-	//Constructor to create a value object from a valueobject. 
+
+	//Constructor to create a value object from a valueobject.
 	//Mainly want to use for retrieving user info from LoginScreen
 	public ValueObject(ValueObject vo) {
 		this.firstName = vo.firstName;
@@ -46,12 +50,12 @@ public class ValueObject implements Reservation {
 		this.secQAnswer = vo.secQAnswer;
 		this.admin = vo.admin;
 	}
-	
+
 	//constructor to create a user
 	public ValueObject(String firstName, String lastName, String username, int ssn,
-			String address, String city, String state, int zip, String password, 
-			String email, String secQ, String secQAnswer) {
-		
+					   String address, String city, String state, int zip, String password,
+					   String email, String secQ, String secQAnswer) {
+
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
@@ -64,17 +68,17 @@ public class ValueObject implements Reservation {
 		this.email = email;
 		this.secQ = secQ;
 		this.secQAnswer = secQAnswer;
-		
+
 	}
-	
+
 	//constructor to create a reservation
 	public ValueObject(int busID, String username) {
-		
+
 		this.pnr = generatePNR();
 		this.busID = busID;
 		this.username = username;
 	}
-	
+
 	//constructor to create a new bus
 	public ValueObject(int busID, String origin, String departTime, String destination,
 			String arrivalTime, int capacity) {
@@ -85,6 +89,10 @@ public class ValueObject implements Reservation {
 		this.arrivalTime = arrivalTime;
 		this.capacity = capacity;
 	}
+
+
+
+
 
 	public int getCapacity() {
 		return capacity;
@@ -245,11 +253,11 @@ public class ValueObject implements Reservation {
 	public void setSecQAnswer(String secQAnswer) {
 		this.secQAnswer = secQAnswer;
 	}
-	
+
 	public void setAdmin(int admin ) {
 		this.admin = admin;
 	}
-	
+
 	//method to generate a unique reservation number
 	public String generatePNR() {
 
@@ -259,7 +267,7 @@ public class ValueObject implements Reservation {
 		for (int i = 0; i < 3; i++) {
 			pnr += (char) ((Math.random() * 9) + 49) + ""; //omit 0 since it can be confused with letter o
 		}
-		
+
 		// generates 3 random uppercase letters and appends them to pnr
 		for (int i = 0; i < 3; i++) {
 			pnr += (char) ((Math.random() * 26) + 65) + "";
@@ -282,6 +290,6 @@ public class ValueObject implements Reservation {
 	
 }
 
-
-
-
+	public void addBus(int bNum, String text, String text1, String text2, String text3, String text4, String text5, int cCap, int mCap) {
+	}
+}

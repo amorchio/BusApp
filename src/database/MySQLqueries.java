@@ -13,14 +13,15 @@ import javafx.stage.Stage;
 import businessLogic.ValueObject;
 
 public class MySQLqueries {
-	
+
 	//static ValueObject user = new ValueObject();
 	static ValueObject bus = new ValueObject();
 	static ValueObject reservation = new ValueObject();
 	static ValueObject user = new ValueObject();
+  
 	//set a calendar because results from the jdbc were 1 day off
 	static Calendar est = Calendar.getInstance(TimeZone.getTimeZone("EST")); 
-	
+  
 	public static Connection initializeDB() {
 
 		try {
@@ -32,63 +33,64 @@ public class MySQLqueries {
 			return connection;
 
 		} catch (Exception ex) {
-			
+
 			System.out.println(ex);
 		}
-		
+
 		return null;
-		 
+
 	}
-	
+
 	public static boolean checkLogin(String username, String password) {
-		
+
 		//rewrite mysql query to use PreparedStatement
-		
+
 		Connection connection = initializeDB();
-		
+
 		try {
-			
+
 			//create search string to look up username
 			String queryString = "SELECT username, password " +
-								 "FROM busbookingapp.user WHERE username = ?";
-			
+					"FROM busbookingapp.user WHERE username = ?";
+
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
-			
+
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-			
+
 			//process the if statement if the mysql query returns a result
 			if (rset.next()) {
 				//check if password matches
 				if (rset.getString("password").equals(password)) {
-					
+
 					return true;
-					
+
 				} else {
 					//display error if password does not match username
 					AlertBox.display("Login Error", "Username and/or password is incorrect. Please try again");
-					
+          
 					return false;
 				}
-				
+
 			} else {
 				//display error if username is not found
 				AlertBox.display("Login Error", "Username not found. Please register as a new user.");
-				
+
 				return false;
 			}
-			
+
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	public static boolean newUser(String lastName, String firstName, int ssn, String address,
+                                
 			String city, String state, int zip, String email, String username, String password,
 			String secQ, String secQAnswer, String adminCode) {
 		
@@ -97,7 +99,7 @@ public class MySQLqueries {
 		try {
 
 			Connection connection = initializeDB();
-			
+
 			//mysql insert statement
 			String queryString = "INSERT INTO " +
 					"busbookingapp.user (username, ssn, firstname, lastname, " +
@@ -105,6 +107,7 @@ public class MySQLqueries {
 					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			
+
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
@@ -119,7 +122,7 @@ public class MySQLqueries {
 			preparedStatement.setString(10, email);
 			preparedStatement.setString(11, secQ);
 			preparedStatement.setString(12, secQAnswer);
-			
+      
 			//check if user keyed correct admin code
 			if (adminCode.equals("gatekeeper")) {
 				preparedStatement.setBoolean(13, true);
@@ -133,7 +136,7 @@ public class MySQLqueries {
 			return true;
 
 		} catch (Exception ex) {
-			
+
 			//display error alert box
 			AlertBox.display("Exception", ex.toString());
 			ex.printStackTrace();
@@ -141,65 +144,65 @@ public class MySQLqueries {
 		return false;
 
 	}
-	
+
 	public static String getSecQ(String username) {
-		
+
 		try {
-			
+
 			Connection connection = initializeDB();
-			
+
 			//create search string to look up username
 			String queryString = "SELECT username, secQ " +
-								 "FROM busbookingapp.user WHERE username = ?";
-			
+					"FROM busbookingapp.user WHERE username = ?";
+
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
-			
-			
+
+
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-			
-			
-			 
+
+
+
 			// process the if statement if the mysql query returns a result
 			if (rset.next()) {
 				// check if password matches
 				return rset.getString("secQ");
 
-			} else {				
-			
-				return "Username not found"; 
+			} else {
+
+				return "Username not found";
 			}
 
 		} catch (Exception ex) {
 			System.out.println(ex);
 			ex.printStackTrace();
 		}
-		
+
 		return "Username not found";
 	}
 
 	public static void getSecQAnswer(String username, String secQAnswer) {
-		
+
 		try {
-			
+
 			Connection connection = initializeDB();
-			
+
 			//create search string to look up username
 			String queryString = "SELECT username, secQAnswer, password " +
-								 "FROM busbookingapp.user WHERE username = ?";
-			
+					"FROM busbookingapp.user WHERE username = ?";
+
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
-			
-			
+
+
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-			
-			
-			 
+
+
+
 			// process the if statement if the mysql query returns a result
 			if (rset.next()) {
 
@@ -207,107 +210,107 @@ public class MySQLqueries {
 
 					// display password in pop up
 					AlertBox.display("Display Password", "Your password is " + rset.getString("password"));
-					
+
 				} else {
 
 					// display alert box
 					AlertBox.display("Error", "Wrong answer! The answer is case-sensitive. Please try again.");
 				}
 
-			} 
+			}
 
 		} catch (Exception ex) {
 			System.out.println(ex);
 			ex.printStackTrace();
 		}
-		
+
 	}
 
 	public static ArrayList<String> getOriginCities() {
-		
+
 		//create string array to hold answer
-		ArrayList<String> originCities = new ArrayList<>(); 
-		
+		ArrayList<String> originCities = new ArrayList<>();
+
 		//initialize connection to database
 		Connection connection = initializeDB();
-		
+
 		try {
-			
+
 			//create string of search query
 			String queryString = "SELECT DISTINCT origin " +
-					 "FROM busbookingapp.bus ORDER BY origin";
-			
+					"FROM busbookingapp.bus ORDER BY origin";
+
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
-						
+
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-			
+
 			while (rset.next()) {
 				originCities.add(rset.getString("origin"));
 			}
-			
-			
+
+
 		} catch (Exception ex) {
 			System.out.println(ex);
 			ex.printStackTrace();
 		}
-		
+
 		return originCities;
 	}
-	
+
 	public static ArrayList<String> getDestinationCities(String origin) {
-		
+
 		//create string array to hold answer
-		ArrayList<String> originCities = new ArrayList<>(); 
-		
+		ArrayList<String> originCities = new ArrayList<>();
+
 		//initialize connection to database
 		Connection connection = initializeDB();
-		
+
 		try {
-			
+
 			//create string of search query so that only cities with the selected origin are displayed
 			String queryString = "SELECT DISTINCT destination " +
-					 "FROM busbookingapp.bus WHERE origin = ? ORDER BY destination";
-			
+					"FROM busbookingapp.bus WHERE origin = ? ORDER BY destination";
+
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, origin);
-						
+
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
-			
+
 			while (rset.next()) {
 				originCities.add(rset.getString("destination"));
 			}
-			
-			
+
+
 		} catch (Exception ex) {
 			System.out.println(ex);
 			ex.printStackTrace();
 		}
-		
+
 		return originCities;
 	}
-	
+
 //with approved login, retrieve user's information from database and return the VO object
+
 	public static ValueObject retrieveInfo(String username) {
 		try {
 
 			Connection connection = initializeDB();
 
-			
+
 			//mysql statement. Just testing with first name and last name to get it working first
 			String queryString = "SELECT * FROM user WHERE username = ?";
-			
-			
+
 			//create the mysql insert preparedstatement
 			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
 			preparedStatement.setString(1, username);
-			
+
 			//execute preparedStatement
 			ResultSet rset = preparedStatement.executeQuery();
-	
+
 			while (rset.next()) {
 				//assign values from database to ValueObject user
 				user.setFirstName(rset.getString("firstname"));
@@ -325,17 +328,17 @@ public class MySQLqueries {
 			return user;			
 
 		} catch (Exception ex) {
-			
+
 			//display error alert box
 			AlertBox.display("Exception", ex.toString());
 			ex.printStackTrace();
 		}
-		
+
 		return user;
 
 	}
-	
-	//method to retrieve userObject 
+
+	//method to retrieve userObject
 	public static ValueObject getUser(){
 		return user;
 	}
@@ -358,7 +361,7 @@ public class MySQLqueries {
 			preparedStatement.setString(1, origin);
 			preparedStatement.setString(2, destination);
 			preparedStatement.setString(3, date);
-						
+				
 			//save query result in variable rset
 			ResultSet rset = preparedStatement.executeQuery();
 			
@@ -368,7 +371,7 @@ public class MySQLqueries {
 				if (rset.getInt("capacity") >= 1) {
 					//create a new object to add to the arraylist
 					ValueObject bus = new ValueObject();
-					
+
 					//set the values for each new object
 					bus.setBusID(rset.getInt("busID"));
 					bus.setCapacity(rset.getInt("capacity"));
@@ -389,17 +392,17 @@ public class MySQLqueries {
 			System.out.println(ex);
 			ex.printStackTrace();
 		}
-		
 		return busResults;
 	}
 	
 	//Reserving a bus method that will update the database. Initial check on whether or not 
 	//the user has already booked the same bus should happen in the businessLogic
+
 	public static void reserveBus(String username, int busID, int capacity) {
 		//Generate PNR
 		String userPNR = bus.generatePNR();
 		int helper = 0;
-		
+
 		try {
 			
 			Connection connection = initializeDB();
@@ -474,16 +477,12 @@ public class MySQLqueries {
 			}
 			
 		}
-
-		 catch (Exception ex) {
-			
 			//display error alert box
 			AlertBox.display("Exception", ex.toString());
 			ex.printStackTrace();
 		}
 
 	}
-	
 	//deleteing a bus method that will update the database
 	public static void deleteReservation(String pnr) {
 			//CREATE BUS PNR VARIABLE
@@ -600,3 +599,4 @@ public class MySQLqueries {
 
 }
 
+}
