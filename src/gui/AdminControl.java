@@ -68,8 +68,8 @@ public class AdminControl extends Application{
     private TextField fldCurrentCapacity = new TextField();
     private TextField fldMaxCapacity = new TextField();
 //checkDate method
-    private static boolean checkDateF(String busDate) {
-        return busDate.matches("^(19|20)\\d\\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$ ");
+    private static boolean checkDateF(String departureDate,String arrivalDate) {
+        return departureDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$") && arrivalDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
     }
 
     private static boolean checkCities(String originCity, String destinationCity){
@@ -77,7 +77,7 @@ public class AdminControl extends Application{
     }
 
         private static  boolean checkTime(String departTime, String arrivalTime){
-            return departTime.matches("^[0-2][0-3]:[0-5][0-9]$");
+            return departTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$") && arrivalTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
 
         }
 
@@ -178,10 +178,10 @@ public class AdminControl extends Application{
                     AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
 
 
-                } else if (checkDateF(departDateBOX.getText()) != true && checkDateF(arrivalDateBOX.getText()) != true) {
+                } else if (checkDateF(departDateBOX.getText(),arrivalDateBOX.getText()) != true) {
                     AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
 
-                } else if (checkTime(txtDepartTime.getText(), txtArriveTime.getText()) != true) {
+                } else if (checkTime(fromTime.getText(), toTime.getText()) != true) {
                     AlertBox.display("INVALID TIME", " Enter as HH:MM (ex. 12:56, 16:32, etc)");
 
                 } else {
@@ -191,11 +191,10 @@ public class AdminControl extends Application{
                     int mCap = Integer.parseInt(fldMaxCapacity.getText());
                     vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
                             arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
-                    System.out.println("Bus Ride Successfully Added");
+                    AlertBox.display("Bus Ride", "Successfully Added");
                     AdminControl add = new AdminControl();
                     add.start(primaryStage);
-                }
-            }
+                }}
         });
 
 
@@ -218,7 +217,7 @@ public class AdminControl extends Application{
         btnBack.setOnAction(e -> {
             Main back = new Main();
             back.start(new Stage());
-           
+
         });
 
 
