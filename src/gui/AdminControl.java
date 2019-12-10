@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import database.MySQLqueries;
 import javafx.scene.control.Dialog;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,10 +18,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -31,14 +36,8 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Paint;
 
 public class AdminControl extends Application {
-	private Label sceneTitle = new Label("Add");
-	private Label busID = new Label("Bus ID");
-	private Label origin = new Label("origin");
-	private Label destination = new Label("destination");
-	private Label departureDate = new Label("Departure Date");
-	private Label departureTime = new Label("Departure Time");
-	private Label currentCapacity = new Label("CurrentSeat");
-	private Label maxCapacity = new Label("MaxSeat");
+	
+	private Label sceneTitle = new Label("Current Buses");
 	private Label txtAddBus = new Label("Add a Bus:");
 
 	// Bottom Row
@@ -74,11 +73,11 @@ public class AdminControl extends Application {
 	}
 
 	private static boolean checkCities(String originCity, String destinationCity) {
-		return originCity.matches("[A-Z]{3}") && destinationCity.matches("[A-Z]{3}");
+		return originCity.matches("([A-Z]{1})([([a-z]+(?: [A-Za-z]+)*), ([A-Za-z]{2})") && destinationCity.matches("[A-Z]{3}");
 	}
 
 	private static boolean checkTime(String departTime) {// String arrivalTime){
-		return departTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
+		return departTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$");
 
 	}
 
@@ -86,31 +85,56 @@ public class AdminControl extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		
+		//create an observable list to display mysql search results
+		ObservableList<ValueObject> searchResult = FXCollections.observableArrayList();
+
+		//run query
+		searchResult = MySQLqueries.getBusSearchResults();
+		
+		//create TableView to display search results
+		//create columns
+		TableColumn<ValueObject, Integer> busIDColumn = new TableColumn<>("Bus Number"); //creates new column
+		busIDColumn.setMinWidth(100); //sets column width
+		busIDColumn.setCellValueFactory(new PropertyValueFactory<>("busID")); //assigns value to display inside table
+		
+		TableColumn<ValueObject, String> originColumn = new TableColumn<>("Origin City"); //creates new column
+		originColumn.setMinWidth(200); //sets column width
+		originColumn.setCellValueFactory(new PropertyValueFactory<>("origin")); //assigns value to display inside table
+		
+		TableColumn<ValueObject, String> destinationColumn = new TableColumn<>("Destination City"); //creates new column
+		destinationColumn.setMinWidth(200); //sets column width
+		destinationColumn.setCellValueFactory(new PropertyValueFactory<>("destination")); //assigns value to display inside table
+		
+		TableColumn<ValueObject, String> dateColumn = new TableColumn<>("Departure Date"); //creates new column
+		dateColumn.setMinWidth(200); //sets column width
+		dateColumn.setCellValueFactory(new PropertyValueFactory<>("busDate")); //assigns value to display inside table
+		
+		TableColumn<ValueObject, String> timeColumn = new TableColumn<>("Departure Time"); //creates new column
+		timeColumn.setMinWidth(200); //sets column width
+		timeColumn.setCellValueFactory(new PropertyValueFactory<>("departTime")); //assigns value to display inside table
+		
+		TableColumn<ValueObject, Integer> capacityColumn = new TableColumn<>("Remaining Seats"); //creates new column
+		capacityColumn.setMinWidth(100); //sets column width
+		capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity")); //assigns value to display inside table
+					
+		//create table
+		TableView<ValueObject> resultTable = new TableView<>();
+		resultTable.setItems(searchResult); //designate list to display
+		resultTable.getColumns().addAll(busIDColumn, originColumn, destinationColumn, dateColumn, timeColumn, capacityColumn);
 
 		HBox hBoxTitle = new HBox(15);
 		hBoxTitle.getChildren().addAll(sceneTitle);
 		hBoxTitle.setAlignment(Pos.CENTER);
 
 		GridPane grid = new GridPane();
-		grid.add(busID, 0, 1);
-		grid.add(origin, 1, 1);
-		grid.add(destination, 2, 1);
-		grid.add(departureDate, 3, 1);
-		grid.add(departureTime, 5, 1);
-		grid.add(currentCapacity, 7, 1);
-		grid.add(maxCapacity, 8, 1);
 
 		ValueObject vo = new ValueObject();
 
 		ArrayList<String> s1 = MySQLqueries.getOriginCities();
 
-		// bustable needed
-		TextArea textArea = new TextArea();
 
-		// adding busRide
-		textArea.setMinWidth(475);
 		grid.setAlignment(Pos.CENTER);
-		grid.add(textArea, 0, 2, 9, 1);
 		grid.add(txtAddBus, 0, 3);
 		grid.setHgap(15);
 		grid.setVgap(10);
@@ -152,8 +176,8 @@ public class AdminControl extends Application {
 		gridBtm.setVgap(10);
 
 		VBox vbox = new VBox(20);
-		Scene sceneText = new Scene(vbox, 700, 700);
-		vbox.getChildren().addAll(hBoxTitle, grid, gridBtm);
+		Scene sceneText = new Scene(vbox, 1024, 683);
+		vbox.getChildren().addAll(hBoxTitle, resultTable, grid, gridBtm);
 		vbox.setAlignment(Pos.CENTER);
 		primaryStage.setTitle("Add/Update/Delete Bus Rides"); // set title
 		primaryStage.setScene(sceneText);
@@ -197,34 +221,7 @@ public class AdminControl extends Application {
 				;
 			}
 
-		});
-		
-		
-		if (checkBusId(busIDBOX.getText()) != true) {
-			AlertBox.display("INVALID BUS NUMBER", "Enter four numbers (ex. 9999,0000)");
-
-		} else if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
-			AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
-
-		} else if (checkDateF(departDateBOX.getText()) != true) {
-			AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
-
-		} else if (checkTime(fromTime.getText()) != true) {
-			AlertBox.display("INVALID TIME", " Enter as HH:MM:SS (ex. 12:56:00, 16:32:00, etc)");
-
-		} else {
-
-			int bNum = Integer.parseInt(busIDBOX.getText());
-			int cCap = Integer.parseInt(fldCurrentCapacity.getText());
-			int mCap = Integer.parseInt(fldMaxCapacity.getText());
-			vo.update(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(), fromTime.getText(),
-					cCap, mCap);
-			AlertBox.display("Bus Ride", "Successfully Updated");
-			AdminControl update = new AdminControl();
-			update.start(primaryStage);
-
-		}
-		
+		});		
 	
 
 	btnDeleteBus.setOnAction(e->{try{

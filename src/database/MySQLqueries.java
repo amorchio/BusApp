@@ -395,6 +395,55 @@ public class MySQLqueries {
 		return busResults;
 	}
 	
+	public static ObservableList<ValueObject> getBusSearchResults() {
+		
+		//create string array to hold answer
+		ObservableList<ValueObject> busResults = FXCollections.observableArrayList(); 
+		
+		//initialize connection to database
+		Connection connection = initializeDB();
+		
+		try {
+			
+			//create string of search query so that only cities with the selected origin are displayed
+			String queryString = "SELECT * FROM bus ORDER BY busID";
+			
+			//create the mysql insert preparedstatement
+			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+				
+			//save query result in variable rset
+			ResultSet rset = preparedStatement.executeQuery();
+			
+			while (rset.next()) {
+				
+				//limit search results to buses with capacity greater than 0
+				if (rset.getInt("capacity") >= 1) {
+					//create a new object to add to the arraylist
+					ValueObject bus = new ValueObject();
+
+					//set the values for each new object
+					bus.setBusID(rset.getInt("busID"));
+					bus.setCapacity(rset.getInt("capacity"));
+					bus.setOrigin(rset.getString("origin"));
+					bus.setDestination(rset.getString("destination"));
+					bus.setDepartTime(rset.getTime("time").toString());
+					bus.setBusDate((rset.getDate("date", est)).toString());
+					
+					//add object to the arraylist
+					busResults.add(bus);
+					
+				}
+				
+			}
+			
+			
+		} catch (Exception ex) {
+			System.out.println(ex);
+			ex.printStackTrace();
+		}
+		return busResults;
+	}
+	
 	//Reserving a bus method that will update the database. Initial check on whether or not 
 	//the user has already booked the same bus should happen in the businessLogic
 
