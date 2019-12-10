@@ -36,8 +36,8 @@ public class AdminControl extends Application{
     private Label destination = new Label("destination");
     private Label departureDate = new Label("Departure Date");
     private Label departureTime = new Label("Departure Time");
-    private Label arriveDate = new Label("Arrival Date");
-    private Label arriveTime = new Label("Arrival Time");
+    //private Label arriveDate = new Label("Arrival Date");
+   // private Label arriveTime = new Label("Arrival Time");
     private Label currentCapacity = new Label("CurrentSeat");
     private Label maxCapacity = new Label("MaxSeat");
     private  Label txtAddBus = new Label("Add a Bus:");
@@ -47,9 +47,9 @@ public class AdminControl extends Application{
     private  Label txtOrigin = new Label("origin");
     private Label txtDestination = new Label("destination");
     private Label txtDepartDate = new Label("Departure Date");
-    private Label txtArrivalDate = new Label("Arrival Date");
+   // private Label txtArrivalDate = new Label("Arrival Date");
     private Label txtDepartTime = new Label("Departure Time");
-    private Label txtArriveTime = new Label("Arrival Time");
+   // private Label txtArriveTime = new Label("Arrival Time");
     private Label txtCurrentCapacity = new Label("Current Capacity");
     private Label txtMaxCapacity = new Label("Max Capacity");
 
@@ -62,23 +62,27 @@ public class AdminControl extends Application{
     private TextField originBOX = new TextField();
     private TextField destinationBOX = new TextField();
     private TextField departDateBOX = new TextField("0000-00-00");
-    private TextField arrivalDateBOX = new TextField("0000-00-00");
+   // private TextField arrivalDateBOX = new TextField("0000-00-00");
     private TextField fromTime = new TextField("00:00:00");
     private TextField toTime = new TextField("00:00:00");
     private TextField fldCurrentCapacity = new TextField();
     private TextField fldMaxCapacity = new TextField();
 
 //checkDate method
-    private static boolean checkDateF(String departureDate,String arrivalDate) {
-        return departureDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$") && arrivalDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
+
+    private static  boolean checkBusId(String busId){
+        return busId.matches("., '^[0-9]{4}$");
+    }
+    private static boolean checkDateF(String departureDate){ //String arrivalDate) {
+        return departureDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$") ;//&& arrivalDate.matches("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
     }
 
     private static boolean checkCities(String originCity, String destinationCity){
         return originCity.matches("[A-Z]{3}") && destinationCity.matches("[A-Z]{3}");
     }
 
-        private static  boolean checkTime(String departTime, String arrivalTime){
-            return departTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$") && arrivalTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
+        private static  boolean checkTime(String departTime){// String arrivalTime){
+            return departTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$"); //&& arrivalTime.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$");
 
         }
 
@@ -99,9 +103,9 @@ public class AdminControl extends Application{
         grid.add(origin, 1, 1);
         grid.add(destination, 2, 1);
         grid.add(departureDate, 3, 1);
-        grid.add(arriveDate, 4, 1);
+       // grid.add(arriveDate, 4, 1);
         grid.add(departureTime, 5, 1);
-        grid.add(arriveTime, 6, 1);
+        //grid.add(arriveTime, 6, 1);
         grid.add(currentCapacity, 7, 1);
         grid.add(maxCapacity, 8, 1);
 
@@ -137,11 +141,11 @@ public class AdminControl extends Application{
         gridBtm.add(destinationBOX, 3, 2);
         gridBtm.add(txtDepartDate, 0, 3);
         gridBtm.add(departDateBOX, 1, 3);
-        gridBtm.add(txtArrivalDate, 2, 3);
-        gridBtm.add(arrivalDateBOX, 3, 3);
+       // gridBtm.add(txtArrivalDate, 2, 3);
+       // gridBtm.add(arrivalDateBOX, 3, 3);
         gridBtm.add(txtDepartTime, 0, 4);
         gridBtm.add(fromTime, 1, 4);
-        gridBtm.add(txtArriveTime, 2, 4);
+       // gridBtm.add(txtArriveTime, 2, 4);
         gridBtm.add(toTime, 3, 4);
         gridBtm.add(txtMaxCapacity, 0, 5);
         gridBtm.add(fldMaxCapacity, 1, 5);
@@ -175,14 +179,18 @@ public class AdminControl extends Application{
             @Override
             public void handle(ActionEvent event) {
                 ValueObject vc = new ValueObject();
-                if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
+                if(checkBusId(busIDBOX.getText())!= true){
+                    AlertBox.display("INVALID FLIGHT NUMBER","Enter for numbers (ex. 9999,0000");
+
+
+            } else if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
                     AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
 
 
-                } else if (checkDateF(departDateBOX.getText(),arrivalDateBOX.getText()) != true) {
+                } else if (checkDateF(departDateBOX.getText() )!= true) {
                     AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
 
-                } else if (checkTime(fromTime.getText(), toTime.getText()) != true) {
+                } else if (checkTime(fromTime.getText())!= true){
                     AlertBox.display("INVALID TIME", " Enter as HH:MM (ex. 12:56, 16:32, etc)");
 
                 } else {
@@ -190,8 +198,8 @@ public class AdminControl extends Application{
                     int bNum = Integer.parseInt(busIDBOX.getText());
                     int cCap = Integer.parseInt(fldCurrentCapacity.getText());
                     int mCap = Integer.parseInt(fldMaxCapacity.getText());
-                    vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
-                            arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
+                    vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText()
+                            ,fromTime.getText(), toTime.getText(), cCap, mCap);
                     AlertBox.display("Bus Ride", "Successfully Added");
                     AdminControl add = new AdminControl();
                     add.start(primaryStage);
@@ -203,19 +211,45 @@ public class AdminControl extends Application{
         btnUpdateBus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                try {
-                    AdminControl update = new AdminControl();
-                    update.start(primaryStage);
-                } catch (SQLException | ClassNotFoundException n) {
-                    System.out.println(n);
-                }
-            }
-        });
+                if (checkBusId(busIDBOX.getText()) != true) {
+                        AlertBox.display("INVALID FLIGHT NUMBER", "Enter for numbers (ex. 9999,0000");
+
+
+                    } else if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
+                        AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
+
+
+                    } else if (checkDateF(departDateBOX.getText()) != true) {
+                        AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
+
+                    } else if(checkTime(fromTime.getText())!= true){
+                        AlertBox.display("INVALID TIME", " Enter as HH:MM (ex. 12:56, 16:32, etc)");
+
+                    } else {
+
+                        int bNum = Integer.parseInt(busIDBOX.getText());
+                        int cCap = Integer.parseInt(fldCurrentCapacity.getText());
+                        int mCap = Integer.parseInt(fldMaxCapacity.getText());
+                        vo.update(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText()
+                              , fromTime.getText(), toTime.getText(), cCap, mCap);
+                        AlertBox.display("Bus Ride", "Successfully Updated");
+                        AdminControl update = new AdminControl();
+                        update.start(primaryStage);
+
+                    }}
+            });
+
+
+
+
+
 
         btnDeleteBus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
             try {
+                int busRide = Integer.parseInt(busIDBOX.getText());
+                vo.deleteBusRide(busRide);
                 AdminControl delete = new AdminControl();
                 delete.start(primaryStage);
                 }
@@ -234,7 +268,7 @@ public class AdminControl extends Application{
 
 
 
-    }
+            }
     public static void main(String[]args){
         Application.launch(args);
     }
