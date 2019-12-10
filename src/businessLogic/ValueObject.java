@@ -1,5 +1,9 @@
 package businessLogic;
 
+import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
+
 public class ValueObject {
 
 	private int capacity;
@@ -85,6 +89,10 @@ public class ValueObject {
 		this.arrivalTime = arrivalTime;
 		this.capacity = capacity;
 	}
+
+
+
+
 
 	public int getCapacity() {
 		return capacity;

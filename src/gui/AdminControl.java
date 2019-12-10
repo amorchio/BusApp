@@ -1,7 +1,11 @@
 package gui;
 import businessLogic.ValueObject;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import database.MySQLqueries;
 import javafx.scene.control.Dialog;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -63,14 +67,27 @@ public class AdminControl extends Application{
     private TextField toTime = new TextField("00:00:00");
     private TextField fldCurrentCapacity = new TextField();
     private TextField fldMaxCapacity = new TextField();
-
+//checkDate method
     private static boolean checkDateF(String busDate) {
         return busDate.matches("^(20)\\d\\dd([-])(0[1-9]|1{012})([-])(0[1-9]|[12][0-9]|3[01])$");
     }
 
+    private static boolean checkCities(String originCity, String destinationCity){
+        return originCity.matches("[A-Z]{3}") && destinationCity.matches("[A-Z]{3}");
+    }
+
+        private static  boolean checkTime(String departTime, String arrivalTime){
+            return departTime.matches("^[0-2][0-3]:[0-5][0-9]$");
+
+        }
+
+    //check origin and destination method
+
+
+
 
     @Override
-    public void start(Stage primaryStage) throws ClassNotFoundException, SQLException {
+    public void start(Stage primaryStage) {
 
         HBox hBoxTitle = new HBox(15);
         hBoxTitle.getChildren().addAll(sceneTitle);
@@ -92,7 +109,7 @@ public class AdminControl extends Application{
         TextArea textArea = new TextArea();
 
 
-        //adding flight
+        //adding busRide
 
         textArea.setMinWidth(475);
         grid.setAlignment(Pos.CENTER);
@@ -150,33 +167,39 @@ public class AdminControl extends Application{
         primaryStage.show();
 
         //add bus action
-        //btnA//ddBus.setOnAction(new EventHandler<ActionEvent>() {
 
 
-        ValueObject vc = new ValueObject();
-       /* if (checkDateF(departDateBOX.getText()) != true
-                && checkDateF(arrivalDateBOX.getText()) != true) {
-            Label actionTarget = new Label(
-                    "INVALID DATE. Enter as YYYY/MM/DD (ex. 2018/12/09, 2018/07/27, etc)");
-            grid.add(actionTarget, 1, 7, 3, 1);
-//time check
+        btnAddBus.setOnAction(new EventHandler<ActionEvent>() {
+                                  @Override
+                                  public void handle(ActionEvent event) {
+                                      ValueObject vc = new ValueObject();
+                                      if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
+                                          AlertBox.display("INVALID CITY", "Enter as City code (ex. ATL, NYC, etc)");
 
-        } else {
+                                      } else if (checkDateF(departDateBOX.getText()) != true
+                                              && checkDateF(arrivalDateBOX.getText()) != true) {
+                                          AlertBox.display("INVALID DATE", " Enter as YYYY/MM/DD (ex. 2018/12/09, 2018/07/27, etc)");
 
-            try {
-                int fNum = Integer.parseInt(busIDBOX.getText());
-                int cCap = Integer.parseInt(fldCurrentCapacity.getText());
-                int mCap = Integer.parseInt(fldMaxCapacity.getText());
-                vo.addBus(fNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
-                        arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
-                System.out.println("Flight Successfully Added");
-                AdminControl add = new AdminControl();
+                                      } else if (checkTime(txtDepartTime.getText(), txtArriveTime.getText()) != true) {
+                                          AlertBox.display("INVALID TIME", " Enter as HH:MM (ex. 12:56, 16:32, etc)");
 
-                add.start(primaryStage);
-            } catch (SQLException | ClassNotFoundException n) {
-                System.out.println(n);
-            }
-        }*/
+                                      } else {
+
+                                          try {
+                                              int bNum = Integer.parseInt(busIDBOX.getText());
+                                              int cCap = Integer.parseInt(fldCurrentCapacity.getText());
+                                              int mCap = Integer.parseInt(fldMaxCapacity.getText());
+                                              vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
+                                                      arrivalDateBOX.getText(), fromTime.getText(), toTime.getText(), cCap, mCap);
+                                              System.out.println("Bus Ride Successfully Added");
+                                              AdminControl add = new AdminControl();
+                                              add.start(primaryStage);
+                                          } catch (SQLException | ClassNotFoundException n) {
+                                              System.out.println(n);
+                                          }
+                                      }
+                                  }
+                              });
 
 
         btnUpdateBus.setOnAction(new EventHandler<ActionEvent>() {
@@ -202,6 +225,7 @@ public class AdminControl extends Application{
                 }
             }
         });
+
 
 
     }
