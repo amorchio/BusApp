@@ -259,6 +259,7 @@ public class ValueObject implements Reservation {
 	}
 
 	//method to generate a unique reservation number
+	@Override
 	public String generatePNR() {
 
 		pnr = "";
