@@ -133,6 +133,18 @@ public class AdminControl extends Application {
 
 		ArrayList<String> s1 = MySQLqueries.getOriginCities();
 
+		//set action for book button
+		btnDeleteBus.setOnAction(i -> {
+			
+			int index = resultTable.getSelectionModel().selectedIndexProperty().get();
+			
+			ObservableList originalResult = MySQLqueries.getBusSearchResults();
+			//pass selection result to the book bus method
+			deleteThisBus(originalResult, index);
+			
+			primaryStage.close();
+
+		});
 
 		grid.setAlignment(Pos.CENTER);
 		grid.add(txtAddBus, 0, 3);
@@ -226,7 +238,7 @@ public class AdminControl extends Application {
 
 	btnDeleteBus.setOnAction(e->{try{
 
-	int busRide = Integer.parseInt(busIDBOX.getText());vo.deleteBusRide(busRide);
+	//int busRide = Integer.parseInt(busIDBOX.getText());vo.deleteBusRide(busRide);
 	AdminControl delete = new AdminControl();delete.start(primaryStage);}catch(
 	Exception n){n.printStackTrace();;}
 
@@ -242,5 +254,21 @@ public class AdminControl extends Application {
 	public static void main(String[]args){
         Application.launch(args);
     }
+	
+	public static void deleteThisBus(ObservableList<ValueObject> vo, int index) {
+		
+		//retrieve bus value from the observable list and add values to new value object
+		ValueObject selBus = new ValueObject();
+		selBus.setBusID(vo.get(index).getBusID());
+		selBus.setBusDate(vo.get(index).getBusDate());
+		selBus.setCapacity(vo.get(index).getCapacity()); // this is an argument to the sql query so that capacity can be adjusted
+		
+		//send query to database
+		MySQLqueries.deleteBus(selBus.getBusID());
+		
+		UsersReservedBuses booking = new UsersReservedBuses();
+		booking.start(new Stage());
+		
+	}
 
 }
