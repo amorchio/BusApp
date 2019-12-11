@@ -260,8 +260,6 @@ public class AdminControl extends Application {
 		//retrieve bus value from the observable list and add values to new value object
 		ValueObject selBus = new ValueObject();
 		selBus.setBusID(vo.get(index).getBusID());
-		selBus.setBusDate(vo.get(index).getBusDate());
-		selBus.setCapacity(vo.get(index).getCapacity()); // this is an argument to the sql query so that capacity can be adjusted
 		
 		//send query to database
 		MySQLqueries.deleteBus(selBus.getBusID());
