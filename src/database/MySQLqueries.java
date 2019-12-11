@@ -673,4 +673,34 @@ public class MySQLqueries {
 		}
 	}	
 	
+	public static void addBus(int bNum, String origin, String destination, String departureDate, String time,int mCap) {
+		try {
+			Connection connection = initializeDB();
+			
+			//mysql statement. Just testing with first name and last name to get it working first
+			String queryString = "INSERT INTO bus (busID, capacity, origin, destination, date, time) " +
+			"VALUES (?,?,?,?,?,?)";
+			
+			//INSERT STATEMENT TO PULL BUSID VALUE WITH CORRESPONDING PNR
+			PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+			preparedStatement.setInt(1, bNum);
+			preparedStatement.setInt(2, mCap);
+			preparedStatement.setString(3, origin);
+			preparedStatement.setString(4, destination);
+			preparedStatement.setString(5, departureDate);
+			preparedStatement.setString(6, time);
+			
+			//executed preparedStatement and save results to rset.
+			preparedStatement.executeUpdate();
+			
+			AlertBox.display("Bus Added", "Bus " + bNum + " has been added");
+		}
+		catch (Exception ex) {
+			
+			//display error alert box
+			AlertBox.display("Exception", ex.toString());
+			ex.printStackTrace();
+		}
+	}
+	
 }

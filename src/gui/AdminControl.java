@@ -186,29 +186,15 @@ public class AdminControl extends Application {
 		btnAddBus.setOnAction(e -> {
 
 			// ValueObject vc = new ValueObject();
-			if (checkBusId(busIDBOX.getText()) != true) {
-				AlertBox.display("INVALID BUS NUMBER", "Enter four numbers (ex. 9999,0000)");
-
-			} else if (checkCities(originBOX.getText(), destinationBOX.getText()) != true) {
-				AlertBox.display("INVALID CITY", "Enter as City, ST code (ex. Atlanta, GA, etc)");
-
-			} else if (checkDateF(departDateBOX.getText()) != true) {
-				AlertBox.display("INVALID DATE", " Enter as YYYY-MM-DD (ex. 2018-12-09, 2018-07-27, etc)");
-
-			} else if (checkTime(fromTime.getText()) != true) {
-				AlertBox.display("INVALID TIME", " Enter as HH:MM:SS (ex. 12:56:00, 16:32:00, etc)");
-
-			} else {
 
 				int bNum = Integer.parseInt(busIDBOX.getText());
-				int cCap = Integer.parseInt(fldCurrentCapacity.getText());
 				int mCap = Integer.parseInt(fldMaxCapacity.getText());
-				vo.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
-						fromTime.getText(), cCap, mCap);
+				MySQLqueries.addBus(bNum, originBOX.getText(), destinationBOX.getText(), departDateBOX.getText(),
+						fromTime.getText(), mCap);
 				AlertBox.display("Bus Ride", "Successfully Added");
 				AdminControl add = new AdminControl();
 				add.start(primaryStage);
-			}
+			
 		});
 
 		btnUpdateBus.setOnAction(e -> {
@@ -266,8 +252,8 @@ public class AdminControl extends Application {
 		//send query to database
 		MySQLqueries.deleteBus(selBus.getBusID());
 		
-		UsersReservedBuses booking = new UsersReservedBuses();
-		booking.start(new Stage());
+		Admin_Page adminMenu = new Admin_Page();
+		adminMenu.start(new Stage());
 		
 	}
 
