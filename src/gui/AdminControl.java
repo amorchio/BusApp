@@ -133,18 +133,7 @@ public class AdminControl extends Application {
 
 		ArrayList<String> s1 = MySQLqueries.getOriginCities();
 
-		//set action for book button
-		btnDeleteBus.setOnAction(i -> {
-			
-			int index = resultTable.getSelectionModel().selectedIndexProperty().get();
-			
-			ObservableList originalResult = MySQLqueries.getBusSearchResults();
-			//pass selection result to the book bus method
-			deleteThisBus(originalResult, index);
-			
-			primaryStage.close();
 
-		});
 
 		grid.setAlignment(Pos.CENTER);
 		grid.add(txtAddBus, 0, 3);
@@ -166,12 +155,10 @@ public class AdminControl extends Application {
 		gridBtm.add(destinationBOX, 3, 2);
 		gridBtm.add(txtDepartDate, 0, 3);
 		gridBtm.add(departDateBOX, 1, 3);
-		gridBtm.add(txtDepartTime, 0, 4);
-		gridBtm.add(fromTime, 1, 4);
-		gridBtm.add(txtMaxCapacity, 0, 5);
-		gridBtm.add(fldMaxCapacity, 1, 5);
-		gridBtm.add(txtCurrentCapacity, 2, 5);
-		gridBtm.add(fldCurrentCapacity, 3, 5);
+		gridBtm.add(txtDepartTime, 2, 3);
+		gridBtm.add(fromTime, 3, 3);
+		gridBtm.add(txtMaxCapacity, 0, 4);
+		gridBtm.add(fldMaxCapacity, 1, 4);
 		gridBtm.add(btnAddBus, 1, 6, 3, 1);
 		btnAddBus.setMinWidth(500);
 
@@ -234,21 +221,36 @@ public class AdminControl extends Application {
 			}
 
 		});		
+		
+		//set action for book button
+		btnDeleteBus.setOnAction(i -> {
+			
+			int index = resultTable.getSelectionModel().selectedIndexProperty().get();
+			
+			ObservableList originalResult = MySQLqueries.getBusSearchResults();
+			//pass selection result to the book bus method
+			deleteThisBus(originalResult, index);
+			
+			primaryStage.close();
+
+		});
 	
 
-	btnDeleteBus.setOnAction(e->{try{
+/*	btnDeleteBus.setOnAction(e->{try{
 
 	//int busRide = Integer.parseInt(busIDBOX.getText());vo.deleteBusRide(busRide);
 	AdminControl delete = new AdminControl();delete.start(primaryStage);}catch(
 	Exception n){n.printStackTrace();;}
 
 	});
+*/
+		btnBack.setOnAction(e -> {
+			Main back = new Main();
+			back.start(new Stage());
+			primaryStage.close();
 
-	btnBack.setOnAction(e->{
-	Main back = new Main();back.start(new Stage());
-
-	});
-
+		});
+	
 	}
 
 	public static void main(String[]args){

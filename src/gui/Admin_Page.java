@@ -36,22 +36,22 @@ public class Admin_Page extends Application{
         Label busId = new Label(" Bus Id:");
         TextField busIdText = new TextField();
         //buttons
-        Button addABusRide= new Button("Add a Bus Ride");
-        Button deleteBusRide = new Button("Delete a Bus Ride");
-        Button updateBusRide = new Button ("Update a Bus Ride");
+        Button addABusRide= new Button("Add a Bus");
+        Button deleteBusRide = new Button("  Delete a Bus  ");
+        Button updateBusRide = new Button ("  Update a Bus  ");
 
         Button logout = new Button ("Log Out");
 
         //grid
         GridPane gridPane = new GridPane();
-        gridPane.setVgap(7);
-        gridPane.setHgap(7);
+        gridPane.setVgap(15);
+        gridPane.setHgap(15);
         gridPane.setPadding(new Insets(15,15,15,15));
 
         gridPane.add(addABusRide,0,0);
         gridPane.add(deleteBusRide,0,1);
         gridPane.add(updateBusRide,0,2);
-        gridPane.add(logout,1,4);
+        gridPane.add(logout,0,12);
 
 
         gridPane.setAlignment(Pos.CENTER);
@@ -65,7 +65,7 @@ public class Admin_Page extends Application{
 
         //SCENE
 
-        Scene scene = new Scene(gridPane, 500,200);
+        Scene scene = new Scene(gridPane, 1024, 683);
         welcome.setTitle("Admin");
         welcome.setScene(scene);
         welcome.show();
@@ -94,6 +94,7 @@ public class Admin_Page extends Application{
         updateBusRide.setOnAction(f->{
            AdminControl update = new AdminControl();
             update.start(welcome);
+            
         });
 
 
